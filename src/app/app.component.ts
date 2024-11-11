@@ -43,6 +43,11 @@ interface HabiticaGearVM {
 export class AppComponent {
   title = "habitica-equipment-tracker";
   gears: HabiticaGearVM[] = [];
+  owned: string[] = [];
+
+  /**
+   * Search value for global search input field.
+   */
   searchValue: string | undefined;
 
   constructor(
@@ -51,6 +56,15 @@ export class AppComponent {
   ) {}
 
   async ngOnInit() {
+    const userInfo = await this.habiticaService.getUserInfo();
+    const ownedGears = userInfo.data.items.gear.owned;
+    console.log("All owned", ownedGears);
+
+    this.owned = Object.keys(ownedGears).filter(
+      (item) => ownedGears[item] && item.includes("_armoire_"),
+    );
+    console.log("Armoire owned", this.owned);
+
     const content = await this.habiticaService.getAllContent();
     console.log(content);
 
@@ -58,7 +72,7 @@ export class AppComponent {
     this.gears = Object.values(gears)
       .filter((item) => item.klass === "armoire")
       .map((item) => this.mapToVM(item))
-      .slice(0, 10);
+      .slice(50, 100);
   }
 
   clear(table: Table) {
@@ -73,7 +87,10 @@ export class AppComponent {
       description: this.mapDescription(gear),
       set: this.mapGearSet(gear),
       type: this.titleCasePipe.transform(gear.type),
-      owned: false,
+      // TODO: This method does not seem to be scalable enough to work with big dataset. Is it
+      //  necessary to think about a better solution ? Worst case, we display a loading component
+      //  during computation (along other stats) and we cache the result for a time.
+      owned: this.owned.includes(gear.key),
     };
   }
 

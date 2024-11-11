@@ -1,7 +1,9 @@
-export interface HabiticaAllContentResponse {
+export interface BaseHabiticaResponse<T> {
   success: boolean;
-  data: HabiticaAllContentData;
+  data: T;
 }
+
+export interface HabiticaAllContentResponse extends BaseHabiticaResponse<HabiticaAllContentData> {}
 
 export interface HabiticaAllContentData {
   gear: {
@@ -41,4 +43,14 @@ export interface HabiticaGear {
   int: number;
   con: number;
   per: number;
+}
+
+export interface HabiticaUserInfoResponse extends BaseHabiticaResponse<HabiticaUserInfo> {}
+
+export interface HabiticaUserInfo {
+  items: {
+    gear: {
+      owned: { [key: string]: boolean };
+    };
+  };
 }

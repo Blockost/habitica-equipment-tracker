@@ -112,7 +112,7 @@
   }
 
   .divider {
-    width: 1px;
+    width: 2px;
     background: var(--red-to-pink-to-purple-vertical-gradient);
     margin-inline: 0.5rem;
   }
@@ -342,16 +342,6 @@
   </div>
 
   <div>
-    <div>
-      <h2>All icons:</h2>
-      @for (g of gears; track g.key) {
-        <img
-          [src]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/shop_' + g.key + '.png'"
-          alt="habitica icon"
-        />
-      }
-    </div>
-
     <div>
       <h2>All armoire gears</h2>
 
