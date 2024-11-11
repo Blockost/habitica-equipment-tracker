@@ -2,12 +2,14 @@ import { Component } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { HabiticaService } from "./services/habitica.service";
 import { HabiticaGear } from "./models/habitica.model";
-import { TableModule } from "primeng/table";
+import { Table, TableModule } from "primeng/table";
 import { NgIf, TitleCasePipe } from "@angular/common";
 import { TagModule } from "primeng/tag";
+import { ButtonModule } from "primeng/button";
+import { FormsModule } from "@angular/forms";
+import { InputTextModule } from "primeng/inputtext";
 
 const IMAGES_REPO_URL = `https://habitica-assets.s3.amazonaws.com/mobileApp/images`;
-
 const REGEXP = /Enchanted Armoire: (.*) \(Item (.*)\)/i;
 const REGEXP_ARMOIRE = /Enchanted Armoire: /i;
 
@@ -24,7 +26,16 @@ interface HabiticaGearVM {
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [RouterOutlet, TableModule, TitleCasePipe, TagModule, NgIf],
+  imports: [
+    RouterOutlet,
+    TableModule,
+    TitleCasePipe,
+    TagModule,
+    NgIf,
+    ButtonModule,
+    FormsModule,
+    InputTextModule,
+  ],
   providers: [TitleCasePipe],
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.scss",
@@ -32,6 +43,7 @@ interface HabiticaGearVM {
 export class AppComponent {
   title = "habitica-equipment-tracker";
   gears: HabiticaGearVM[] = [];
+  searchValue: string | undefined;
 
   constructor(
     private readonly habiticaService: HabiticaService,
@@ -47,6 +59,10 @@ export class AppComponent {
       .filter((item) => item.klass === "armoire")
       .map((item) => this.mapToVM(item))
       .slice(0, 10);
+  }
+
+  clear(table: Table) {
+    table.clear();
   }
 
   private mapToVM(gear: HabiticaGear): HabiticaGearVM {

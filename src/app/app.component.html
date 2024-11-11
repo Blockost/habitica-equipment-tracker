@@ -355,13 +355,35 @@
     <div>
       <h2>All armoire gears</h2>
 
-      <div class="table-container" style="height: 400px">
+      <div class="table-container" style="height: 500px; max-width: 1000px">
         <p-table
+          #dt1
           [value]="gears"
+          [globalFilterFields]="['name', 'set', 'type']"
           [scrollable]="true"
           scrollHeight="flex"
           styleClass="p-datatable-striped"
         >
+          <ng-template pTemplate="caption">
+            <div class="flex">
+              <p-button
+                label="Clear"
+                [outlined]="true"
+                icon="pi pi-filter-slash"
+                (onClick)="clear(dt1)"
+              />
+              <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input
+                  pInputText
+                  type="text"
+                  [(ngModel)]="searchValue"
+                  (input)="dt1.filterGlobal(searchValue, 'contains')"
+                  placeholder="Search by keyword"
+                />
+              </span>
+            </div>
+          </ng-template>
           <ng-template pTemplate="header">
             <tr>
               <th pSortableColumn="name">
@@ -381,6 +403,48 @@
               <th pSortableColumn="owned">
                 Owned
                 <p-sortIcon field="owned" />
+              </th>
+            </tr>
+            <tr>
+              <th>
+                <p-columnFilter
+                  type="text"
+                  field="name"
+                  placeholder="Name"
+                  ariaLabel="Search by gear name"
+                  matchMode="contains"
+                  showClearButton="false"
+                />
+              </th>
+              <th></th>
+              <th></th>
+              <th>
+                <p-columnFilter
+                  type="text"
+                  field="set"
+                  placeholder="Set name"
+                  ariaLabel="Search by set name"
+                  matchMode="contains"
+                  showClearButton="false"
+                />
+              </th>
+              <th>
+                <p-columnFilter
+                  type="text"
+                  field="type"
+                  placeholder="Gear type"
+                  ariaLabel="Search by gear type"
+                  matchMode="contains"
+                  showClearButton="false"
+                />
+              </th>
+              <th>
+                <p-columnFilter
+                  type="boolean"
+                  field="owned"
+                  ariaLabel="Filter by owned or not"
+                  showClearButton="false"
+                />
               </th>
             </tr>
           </ng-template>
