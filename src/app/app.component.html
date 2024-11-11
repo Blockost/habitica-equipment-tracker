@@ -84,6 +84,7 @@
     min-height: 100%;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
     padding: 1rem;
     box-sizing: inherit;
@@ -242,18 +243,6 @@
       </svg>
       <h1>Hello, {{ title }}</h1>
       <p>Congratulations! Your app is running. 🎉</p>
-
-      <div>
-        <p>All icons:</p>
-        @for (g of gears; track g.key) {
-          <img
-            [src]="
-              'https://habitica-assets.s3.amazonaws.com/mobileApp/images/shop_' + g.key + '.png'
-            "
-            alt="habitica icon"
-          />
-        }
-      </div>
     </div>
     <div class="divider" role="separator" aria-label="Divider"></div>
     <div class="right-side">
@@ -348,6 +337,69 @@
             />
           </svg>
         </a>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div>
+      <h2>All icons:</h2>
+      @for (g of gears; track g.key) {
+        <img
+          [src]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/shop_' + g.key + '.png'"
+          alt="habitica icon"
+        />
+      }
+    </div>
+
+    <div>
+      <h2>All armoire gears</h2>
+
+      <div class="table-container" style="height: 400px">
+        <p-table
+          [value]="gears"
+          [scrollable]="true"
+          scrollHeight="flex"
+          styleClass="p-datatable-striped"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="name">
+                Name
+                <p-sortIcon field="name" />
+              </th>
+              <th>Image</th>
+              <th>Description</th>
+              <th pSortableColumn="set">
+                Set
+                <p-sortIcon field="set" />
+              </th>
+              <th pSortableColumn="type">
+                Type
+                <p-sortIcon field="type" />
+              </th>
+              <th pSortableColumn="owned">
+                Owned
+                <p-sortIcon field="owned" />
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-vm>
+            <tr>
+              <td>{{ vm.name }}</td>
+              <td>
+                <img [src]="vm.icon" [alt]="vm.key" />
+              </td>
+              <td>{{ vm.description }}</td>
+              <td>{{ vm.set }}</td>
+              <td>{{ vm.type }}</td>
+              <td>
+                <p-tag *ngIf="vm.owned" severity="success" value="Owned" />
+                <p-tag *ngIf="!vm.owned" severity="warning" value="Not owned" />
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
       </div>
     </div>
   </div>

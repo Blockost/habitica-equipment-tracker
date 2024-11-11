@@ -33,6 +33,10 @@ export interface HabiticaGear {
    * have a value in the form of [klass]-[key].
    */
   set: string;
+  /**
+   * Type of equipment.
+   */
+  type: string;
   str: number;
   int: number;
   con: number;
