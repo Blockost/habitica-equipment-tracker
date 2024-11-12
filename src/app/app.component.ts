@@ -71,8 +71,7 @@ export class AppComponent {
     const gears = content.gear.flat;
     this.gears = Object.values(gears)
       .filter((item) => item.klass === "armoire")
-      .map((item) => this.mapToVM(item))
-      .slice(50, 100);
+      .map((item) => this.mapToVM(item));
   }
 
   clear(table: Table) {

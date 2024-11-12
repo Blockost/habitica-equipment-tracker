@@ -345,13 +345,18 @@
     <div>
       <h2>All armoire gears</h2>
 
-      <div class="table-container" style="height: 500px; max-width: 1000px">
+      <div class="table-container" style="height: 600px; max-width: 1000px">
         <p-table
           #dt1
           [value]="gears"
           [globalFilterFields]="['name', 'set', 'type']"
           [scrollable]="true"
           scrollHeight="flex"
+          [paginator]="true"
+          [rows]="10"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
           styleClass="p-datatable-striped"
         >
           <ng-template pTemplate="caption">
