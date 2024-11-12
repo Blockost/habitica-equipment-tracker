@@ -330,6 +330,8 @@
         <p-table
           #dt1
           [value]="gears"
+          sortField="set"
+          [sortOrder]="1"
           [globalFilterFields]="['name', 'set', 'type']"
           [scrollable]="true"
           scrollHeight="flex"
