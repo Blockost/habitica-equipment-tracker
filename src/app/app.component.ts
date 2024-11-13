@@ -6,8 +6,19 @@ import { Table, TableModule } from "primeng/table";
 import { NgIf, TitleCasePipe } from "@angular/common";
 import { TagModule } from "primeng/tag";
 import { ButtonModule } from "primeng/button";
-import { FormsModule } from "@angular/forms";
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
 import { InputTextModule } from "primeng/inputtext";
+import { IconFieldModule } from "primeng/iconfield";
+import { InputIconModule } from "primeng/inputicon";
+import { PanelModule } from "primeng/panel";
+import { CheckboxModule } from "primeng/checkbox";
+import { ContextService } from "./services/context.service";
 
 const IMAGES_REPO_URL = `https://habitica-assets.s3.amazonaws.com/mobileApp/images`;
 const REGEXP = /Enchanted Armoire: (.*) \(Item (.*)\)/i;
@@ -35,15 +46,21 @@ interface HabiticaGearVM {
     ButtonModule,
     FormsModule,
     InputTextModule,
+    IconFieldModule,
+    InputIconModule,
+    PanelModule,
+    CheckboxModule,
+    ReactiveFormsModule,
   ],
   providers: [TitleCasePipe],
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.scss",
 })
 export class AppComponent {
-  title = "habitica-equipment-tracker";
+  formGroup!: FormGroup;
   gears: HabiticaGearVM[] = [];
   owned: string[] = [];
+  username = "";
 
   /**
    * Search value for global search input field.
@@ -53,18 +70,78 @@ export class AppComponent {
   constructor(
     private readonly habiticaService: HabiticaService,
     private readonly titleCasePipe: TitleCasePipe,
+    private readonly contextService: ContextService,
   ) {}
 
-  async ngOnInit() {
-    const userInfo = await this.habiticaService.getUserInfo();
-    const ownedGears = userInfo.data.items.gear.owned;
-    console.log("All owned", ownedGears);
+  ngOnInit(): void {
+    this.contextService.init();
+    const userId = this.contextService.userId;
+    const apiToken = this.contextService.apiToken;
 
-    this.owned = Object.keys(ownedGears).filter(
-      (item) => ownedGears[item] && item.includes("_armoire_"),
-    );
-    console.log("Armoire owned", this.owned);
+    this.formGroup = new FormGroup({
+      userId: new FormControl(userId, [Validators.required]),
+      apiToken: new FormControl(apiToken, [Validators.required]),
+      saveLocally: new FormControl(false, [Validators.required]),
+    });
+  }
 
+  async submitUserCredentials(): Promise<void> {
+    console.debug("Submit user credentials");
+    console.debug(this.formGroup);
+
+    if (this.formGroup.invalid) {
+      console.debug("Form contains errors", this.formGroup.errors);
+      return;
+    }
+
+    const userId = this.formGroup.get("userId")?.value;
+    if (!userId) {
+      throw new Error("User ID cannot be null");
+    }
+
+    const apiToken = this.formGroup.get("apiToken")?.value;
+    if (!apiToken) {
+      throw new Error("API Token cannot be null");
+    }
+
+    const saveLocally = this.formGroup.get("saveLocally")?.value;
+    if (saveLocally === undefined || saveLocally === null) {
+      throw new Error("Save locally consent cannot be null");
+    }
+
+    this.contextService.save(userId, apiToken, saveLocally);
+    await this.refresh();
+  }
+
+  clearFilters(table: Table) {
+    table.clear();
+  }
+
+  async refresh(): Promise<void> {
+    await this.fetchUserData();
+    await this.fetchHabiticaContent();
+  }
+
+  private async fetchUserData(): Promise<void> {
+    const userId = this.contextService.userId;
+    const apiToken = this.contextService.apiToken;
+
+    try {
+      const userInfo = await this.habiticaService.getUserInfo(userId, apiToken);
+      this.username = userInfo.auth.local.username;
+      const ownedGears = userInfo.items.gear.owned;
+      console.log("All owned", ownedGears);
+
+      this.owned = Object.keys(ownedGears).filter(
+        (item) => ownedGears[item] && item.includes("_armoire_"),
+      );
+      console.log("Armoire owned", this.owned);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  private async fetchHabiticaContent() {
     const content = await this.habiticaService.getAllContent();
     console.log(content);
 
@@ -72,10 +149,6 @@ export class AppComponent {
     this.gears = Object.values(gears)
       .filter((item) => item.klass === "armoire")
       .map((item) => this.mapToVM(item));
-  }
-
-  clear(table: Table) {
-    table.clear();
   }
 
   private mapToVM(gear: HabiticaGear): HabiticaGearVM {

@@ -247,7 +247,7 @@
           </clipPath>
         </defs>
       </svg>
-      <h1>Hello, fellow Habitican !</h1>
+      <h1>Hello, {{ username ? username : "fellow Habitican" }} !</h1>
       <p>Come, take a seat by the fire 🔥.</p>
       <p>
         Here, you will be able to discover new equipment that will aid you greatly in this journey
@@ -323,6 +323,71 @@
   </div>
 
   <div>
+    <div class="credentials-panel">
+      <p-panel header="Start here!">
+        <div class="mb-3">
+          <p>
+            Add some text here to let the user know why we need credentials, where to get them
+            etc...
+          </p>
+          <br />
+          <p>
+            Check what
+            <a href="https://tools.habitica.com" target="_blank" rel="noopener">
+              https://tools.habitica.com
+            </a>
+            displays as note/warning message.
+          </p>
+          <br />
+          <p>
+            Your information will <b>never</b> be stored away or shared with any third-party
+            application.
+          </p>
+        </div>
+
+        <!-- todo: Update this logic to be based on auth data instead of username -->
+        <div *ngIf="!!username">
+          <p>You're authenticated {{ username }} ! Take a look below:</p>
+          <br />
+          <p-button label="Refresh" type="button" (click)="refresh()" outlined="true" />
+        </div>
+
+        <form
+          *ngIf="!username"
+          class="credentials-form"
+          [formGroup]="formGroup"
+          (ngSubmit)="submitUserCredentials()"
+        >
+          <label for="userId">User ID</label>
+          <p-iconField iconPosition="left">
+            <p-inputIcon styleClass="pi pi-user" />
+            <input
+              pInputText
+              id="userId"
+              type="text"
+              placeholder="User ID"
+              formControlName="userId"
+            />
+          </p-iconField>
+
+          <p-iconField iconPosition="left">
+            <p-inputIcon styleClass="pi pi-lock" />
+            <input pInputText type="password" placeholder="API Token" formControlName="apiToken" />
+          </p-iconField>
+
+          <p-checkbox
+            formControlName="saveLocally"
+            label="Save my information locally"
+            value=""
+            inputId="saveLocally"
+            name="saveLocally"
+          />
+
+          <p-button label="Submit" type="submit" />
+        </form>
+      </p-panel>
+    </div>
+
     <div>
       <h2>All armoire gears</h2>
 
@@ -348,7 +413,7 @@
                 label="Clear"
                 [outlined]="true"
                 icon="pi pi-filter-slash"
-                (onClick)="clear(dt1)"
+                (onClick)="clearFilters(dt1)"
               />
               <span class="p-input-icon-left ml-auto">
                 <i class="pi pi-search"></i>

@@ -48,6 +48,11 @@ export interface HabiticaGear {
 export interface HabiticaUserInfoResponse extends BaseHabiticaResponse<HabiticaUserInfo> {}
 
 export interface HabiticaUserInfo {
+  auth: {
+    local: {
+      username: string;
+    };
+  };
   items: {
     gear: {
       owned: { [key: string]: boolean };
