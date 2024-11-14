@@ -7,9 +7,9 @@ import { NgIf, TitleCasePipe } from "@angular/common";
 import { TagModule } from "primeng/tag";
 import { ButtonModule } from "primeng/button";
 import {
-  FormControl,
   FormGroup,
   FormsModule,
+  NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
@@ -19,6 +19,7 @@ import { InputIconModule } from "primeng/inputicon";
 import { PanelModule } from "primeng/panel";
 import { CheckboxModule } from "primeng/checkbox";
 import { ContextService } from "./services/context.service";
+import { AccordionModule } from "primeng/accordion";
 
 const IMAGES_REPO_URL = `https://habitica-assets.s3.amazonaws.com/mobileApp/images`;
 const REGEXP = /Enchanted Armoire: (.*) \(Item (.*)\)/i;
@@ -51,6 +52,7 @@ interface HabiticaGearVM {
     PanelModule,
     CheckboxModule,
     ReactiveFormsModule,
+    AccordionModule,
   ],
   providers: [TitleCasePipe],
   templateUrl: "./app.component.html",
@@ -71,6 +73,7 @@ export class AppComponent {
     private readonly habiticaService: HabiticaService,
     private readonly titleCasePipe: TitleCasePipe,
     private readonly contextService: ContextService,
+    private readonly fb: NonNullableFormBuilder,
   ) {}
 
   ngOnInit(): void {
@@ -78,19 +81,18 @@ export class AppComponent {
     const userId = this.contextService.userId;
     const apiToken = this.contextService.apiToken;
 
-    this.formGroup = new FormGroup({
-      userId: new FormControl(userId, [Validators.required]),
-      apiToken: new FormControl(apiToken, [Validators.required]),
-      saveLocally: new FormControl(false, [Validators.required]),
+    this.formGroup = this.fb.group({
+      userId: [userId || "", [Validators.required]],
+      apiToken: [apiToken || "", [Validators.required]],
+      saveLocally: [false, [Validators.required]],
     });
   }
 
   async submitUserCredentials(): Promise<void> {
     console.debug("Submit user credentials");
-    console.debug(this.formGroup);
 
     if (this.formGroup.invalid) {
-      console.debug("Form contains errors", this.formGroup.errors);
+      console.error("Form contains errors", this.formGroup);
       return;
     }
 
@@ -120,6 +122,14 @@ export class AppComponent {
   async refresh(): Promise<void> {
     await this.fetchUserData();
     await this.fetchHabiticaContent();
+  }
+
+  async reset(): Promise<void> {
+    this.contextService.clear();
+    this.formGroup.reset({ userId: "", apiToken: "", saveLocally: false });
+    this.username = "";
+    this.gears = [];
+    this.owned = [];
   }
 
   private async fetchUserData(): Promise<void> {

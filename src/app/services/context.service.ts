@@ -11,7 +11,6 @@ const LOCAL_STORAGE_KEY = "HABITICA_USER_CREDENTIALS";
 export class ContextService {
   private _userId = "";
   private _apiToken = "";
-  private _saved?: boolean;
 
   get userId(): string {
     return this._userId;
@@ -39,7 +38,6 @@ export class ContextService {
   save(userId: string, apiToken: string, saveLocally: boolean) {
     this._userId = userId;
     this._apiToken = apiToken;
-    this._saved = saveLocally;
 
     if (saveLocally) {
       const data = JSON.stringify({ userId, apiToken, saveLocally });
@@ -50,8 +48,6 @@ export class ContextService {
   clear(): void {
     this._userId = "";
     this._apiToken = "";
-    if (this._saved) {
-      localStorage.removeItem(LOCAL_STORAGE_KEY);
-    }
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
   }
 }
