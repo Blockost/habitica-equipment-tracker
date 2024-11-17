@@ -323,112 +323,114 @@
   </div>
 
   <div style="max-width: 1000px">
-    <div class="credentials-panel">
-      <p-panel
-        header="Enter your Habitica API crendentials"
-        [style]="{ 'background-color': '#F9F9F9' }"
-      >
-        <div class="mb-3">
-          <p>
-            This tool requires your
-            <a href="https://habitica.fandom.com/wiki/API_Options" target="_blank" rel="noopener"
-              >Habitica API credentials</a
-            >
-            to contact
-            <a
-              href="https://habitica.fandom.com/wiki/Application_Programming_Interface"
-              target="_blank"
-              rel="noopener"
-              >Habitica API</a
-            >
-            on your behalf and retrieve information from your account. It is 100% safe to use. Your
-            information will <b>never</b> be stored away or shared with any third-party application.
-          </p>
-        </div>
-
-        <!-- todo: Update this logic to be based on auth data instead of username -->
-        <div *ngIf="!!username">
-          <p>
-            Well done, <b>{{ username }}</b
-            >, you are authenticated ! Take a look below:
-          </p>
-          <br />
-          <div class="flex gap-2">
-            <p-button
-              label="Refresh"
-              type="button"
-              icon="pi pi-refresh"
-              severity="secondary"
-              (click)="refresh()"
-            />
-            <p-button
-              label="Clear all my data"
-              type="button"
-              icon="pi pi-eraser"
-              severity="warning"
-              (click)="reset()"
-            />
-          </div>
-        </div>
-
-        <form
-          *ngIf="!username"
-          class="credentials-form"
-          [formGroup]="formGroup"
-          (ngSubmit)="submitUserCredentials()"
+    <div class="card flex justify-content-center">
+      <p-accordion [activeIndex]="0">
+        <p-accordionTab
+          [header]="'Enter your Habitica API crendentials' + (!!username ? '  ✅' : '')"
         >
-          <div class="form-input">
-            <div class="form-label">
-              <label for="formcontrol-userId">User ID</label>
-              <i class="pi pi-question-circle"></i>
-            </div>
-            <div>
-              <p-iconField iconPosition="left">
-                <p-inputIcon styleClass="pi pi-user" />
-                <input
-                  pInputText
-                  id="formcontrol-userId"
-                  type="text"
-                  placeholder="User ID"
-                  formControlName="userId"
-                />
-              </p-iconField>
+          <div class="mb-3">
+            <p>
+              This tool requires your
+              <a href="https://habitica.fandom.com/wiki/API_Options" target="_blank" rel="noopener"
+                >Habitica API credentials</a
+              >
+              to contact
+              <a
+                href="https://habitica.fandom.com/wiki/Application_Programming_Interface"
+                target="_blank"
+                rel="noopener"
+                >Habitica API</a
+              >
+              on your behalf and retrieve information from your account. It is 100% safe to use.
+              Your information will <b>never</b> be stored away or shared with any third-party
+              application.
+            </p>
+          </div>
+
+          <!-- todo: Update this logic to be based on auth data instead of username -->
+          <div *ngIf="!!username">
+            <p>
+              Well done, <b>{{ username }}</b
+              >, you are authenticated ! Take a look below:
+            </p>
+            <br />
+            <div class="flex gap-2">
+              <p-button
+                label="Refresh"
+                type="button"
+                icon="pi pi-refresh"
+                severity="secondary"
+                (click)="refresh()"
+              />
+              <p-button
+                label="Clear all my data"
+                type="button"
+                icon="pi pi-eraser"
+                severity="warning"
+                (click)="reset()"
+              />
             </div>
           </div>
 
-          <div class="form-input">
-            <div class="form-label">
-              <label for="formcontrol-api-token">API Token</label>
-              <i class="pi pi-question-circle"></i>
+          <form
+            *ngIf="!username"
+            class="credentials-form"
+            [formGroup]="formGroup"
+            (ngSubmit)="submitUserCredentials()"
+          >
+            <div class="form-input">
+              <div class="form-label">
+                <label for="formcontrol-userId">User ID</label>
+                <i class="pi pi-question-circle"></i>
+              </div>
+              <div>
+                <p-iconField iconPosition="left">
+                  <p-inputIcon styleClass="pi pi-user" />
+                  <input
+                    pInputText
+                    id="formcontrol-userId"
+                    type="text"
+                    placeholder="User ID"
+                    formControlName="userId"
+                  />
+                </p-iconField>
+              </div>
             </div>
-            <div>
-              <p-iconField iconPosition="left">
-                <p-inputIcon styleClass="pi pi-lock" />
-                <input
-                  pInputText
-                  id="formcontrol-api-token"
-                  type="password"
-                  placeholder="API Token"
-                  formControlName="apiToken"
-                />
-              </p-iconField>
+
+            <div class="form-input">
+              <div class="form-label">
+                <label for="formcontrol-api-token">API Token</label>
+                <i class="pi pi-question-circle"></i>
+              </div>
+              <div>
+                <p-iconField iconPosition="left">
+                  <p-inputIcon styleClass="pi pi-lock" />
+                  <input
+                    pInputText
+                    id="formcontrol-api-token"
+                    type="password"
+                    placeholder="API Token"
+                    formControlName="apiToken"
+                  />
+                </p-iconField>
+              </div>
             </div>
-          </div>
 
-          <p-checkbox
-            formControlName="saveLocally"
-            label="Save my information locally"
-            value=""
-            inputId="saveLocally"
-            name="saveLocally"
-          />
+            <p-checkbox
+              formControlName="saveLocally"
+              label="Save my information locally"
+              value=""
+              inputId="saveLocally"
+              name="saveLocally"
+            />
 
-          <p-button label="Submit" type="submit" />
-        </form>
-      </p-panel>
+            <p-button label="Submit" type="submit" />
+          </form>
+        </p-accordionTab>
+      </p-accordion>
     </div>
 
-    <div *ngIf="!!username">
+    <div *ngIf="!!username" class="card">
       <h2>All armoire gears</h2>
 
       <div class="table-container" style="height: 600px; max-width: 1000px">
@@ -550,6 +552,7 @@
       </div>
     </div>
   </div>
+  <!-- TODO: add footer here + show app version -->
 </main>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
