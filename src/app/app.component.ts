@@ -1,8 +1,7 @@
 import { Component } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { HabiticaService } from "./services/habitica.service";
-import { HabiticaGear } from "./models/habitica.model";
-import { Table, TableModule } from "primeng/table";
+import { TableModule } from "primeng/table";
 import { NgIf, TitleCasePipe } from "@angular/common";
 import { TagModule } from "primeng/tag";
 import { ButtonModule } from "primeng/button";
@@ -20,20 +19,9 @@ import { PanelModule } from "primeng/panel";
 import { CheckboxModule } from "primeng/checkbox";
 import { ContextService } from "./services/context.service";
 import { AccordionModule } from "primeng/accordion";
-
-const IMAGES_REPO_URL = `https://habitica-assets.s3.amazonaws.com/mobileApp/images`;
-const REGEXP = /Enchanted Armoire: (.*) \(Item (.*)\)/i;
-const REGEXP_ARMOIRE = /Enchanted Armoire: /i;
-
-interface HabiticaGearVM {
-  key: string;
-  icon: string;
-  name: string;
-  description: string;
-  set: string;
-  type: string;
-  owned: boolean;
-}
+import { TabViewModule } from "primeng/tabview";
+import { StatsTabComponent } from "./tabs/stats/stats-tab.component";
+import { TableTabComponent } from "./tabs/table/table-tab.component";
 
 @Component({
   selector: "app-root",
@@ -53,6 +41,9 @@ interface HabiticaGearVM {
     CheckboxModule,
     ReactiveFormsModule,
     AccordionModule,
+    TabViewModule,
+    StatsTabComponent,
+    TableTabComponent,
   ],
   providers: [TitleCasePipe],
   templateUrl: "./app.component.html",
@@ -60,14 +51,8 @@ interface HabiticaGearVM {
 })
 export class AppComponent {
   formGroup!: FormGroup;
-  gears: HabiticaGearVM[] = [];
-  owned: string[] = [];
-  username = "";
 
-  /**
-   * Search value for global search input field.
-   */
-  searchValue: string | undefined;
+  username = "";
 
   constructor(
     private readonly habiticaService: HabiticaService,
@@ -76,7 +61,7 @@ export class AppComponent {
     private readonly fb: NonNullableFormBuilder,
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.contextService.init();
     const userId = this.contextService.userId;
     const apiToken = this.contextService.apiToken;
@@ -112,99 +97,19 @@ export class AppComponent {
     }
 
     this.contextService.save(userId, apiToken, saveLocally);
-    await this.refresh();
-  }
 
-  clearFilters(table: Table) {
-    table.clear();
+    const userInfo = await this.habiticaService.getUserInfo(userId, apiToken);
+    this.username = userInfo.auth.local.username;
   }
 
   async refresh(): Promise<void> {
-    await this.fetchUserData();
-    await this.fetchHabiticaContent();
+    // TODO 2024-11-18 Blockost check what to do here
+    console.error("FIXME!");
   }
 
   async reset(): Promise<void> {
     this.contextService.clear();
     this.formGroup.reset({ userId: "", apiToken: "", saveLocally: false });
     this.username = "";
-    this.gears = [];
-    this.owned = [];
-  }
-
-  private async fetchUserData(): Promise<void> {
-    const userId = this.contextService.userId;
-    const apiToken = this.contextService.apiToken;
-
-    try {
-      const userInfo = await this.habiticaService.getUserInfo(userId, apiToken);
-      this.username = userInfo.auth.local.username;
-      const ownedGears = userInfo.items.gear.owned;
-      console.log("All owned", ownedGears);
-
-      this.owned = Object.keys(ownedGears).filter(
-        (item) => ownedGears[item] && item.includes("_armoire_"),
-      );
-      console.log("Armoire owned", this.owned);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  private async fetchHabiticaContent() {
-    const content = await this.habiticaService.getAllContent();
-    console.log(content);
-
-    const gears = content.gear.flat;
-    this.gears = Object.values(gears)
-      .filter((item) => item.klass === "armoire")
-      .map((item) => this.mapToVM(item));
-  }
-
-  private mapToVM(gear: HabiticaGear): HabiticaGearVM {
-    return {
-      key: gear.key,
-      icon: `${IMAGES_REPO_URL}/shop_${gear.key}.png`,
-      name: gear.text,
-      description: this.mapDescription(gear),
-      set: this.mapGearSet(gear),
-      type: this.titleCasePipe.transform(gear.type),
-      // TODO: This method does not seem to be scalable enough to work with big dataset. Is it
-      //  necessary to think about a better solution ? Worst case, we display a loading component
-      //  during computation (along other stats) and we cache the result for a time.
-      owned: this.owned.includes(gear.key),
-    };
-  }
-
-  private mapDescription(gear: HabiticaGear): string {
-    if (gear == null || gear.notes == null || gear.notes.length < 1) {
-      return "-";
-    }
-
-    const match = gear.notes.match(REGEXP_ARMOIRE);
-    if (match == null) {
-      return gear.notes.trim();
-    }
-
-    return gear.notes.slice(0, match.index).trim();
-  }
-
-  private mapGearSet(gear: HabiticaGear): string {
-    if (gear == null || gear.set == null || gear.set.length < 1) {
-      return "-";
-    }
-
-    if (gear.set.startsWith("armoire-")) {
-      return "-";
-    }
-
-    const match = gear.notes.match(REGEXP);
-    if (match == null) {
-      return "-";
-    }
-
-    const setName = match[1];
-    const setIndex = match[2];
-    return `${setName} (${setIndex})`.trim();
   }
 }
