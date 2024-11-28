@@ -4,7 +4,7 @@
   <p-table
     #dt1
     [value]="gears"
-    sortField="set"
+    sortField="setFullName"
     [sortOrder]="1"
     [globalFilterFields]="['name', 'set', 'type']"
     [scrollable]="true"
@@ -44,9 +44,9 @@
         </th>
         <th>Image</th>
         <th>Description</th>
-        <th pSortableColumn="set">
+        <th pSortableColumn="setFullName">
           Set
-          <p-sortIcon field="set" />
+          <p-sortIcon field="setFullName" />
         </th>
         <th pSortableColumn="type">
           Type
@@ -107,7 +107,7 @@
           <img [src]="vm.icon" [alt]="vm.key" />
         </td>
         <td>{{ vm.description }}</td>
-        <td>{{ vm.set }}</td>
+        <td>{{ vm.setFullName }}</td>
         <td>{{ vm.type }}</td>
         <td>
           <p-tag *ngIf="vm.owned" severity="success" value="Owned" />

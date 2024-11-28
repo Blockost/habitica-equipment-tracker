@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { HabiticaService } from "./services/habitica.service";
 import { TableModule } from "primeng/table";
-import { NgIf, TitleCasePipe } from "@angular/common";
+import { NgIf } from "@angular/common";
 import { TagModule } from "primeng/tag";
 import { ButtonModule } from "primeng/button";
 import {
@@ -22,6 +22,7 @@ import { AccordionModule } from "primeng/accordion";
 import { TabViewModule } from "primeng/tabview";
 import { StatsTabComponent } from "./tabs/stats/stats-tab.component";
 import { TableTabComponent } from "./tabs/table/table-tab.component";
+import { GroupedBySetsTabComponent } from "./tabs/groupedBySets/grouped-by-sets.component";
 
 @Component({
   selector: "app-root",
@@ -29,7 +30,6 @@ import { TableTabComponent } from "./tabs/table/table-tab.component";
   imports: [
     RouterOutlet,
     TableModule,
-    TitleCasePipe,
     TagModule,
     NgIf,
     ButtonModule,
@@ -44,8 +44,8 @@ import { TableTabComponent } from "./tabs/table/table-tab.component";
     TabViewModule,
     StatsTabComponent,
     TableTabComponent,
+    GroupedBySetsTabComponent,
   ],
-  providers: [TitleCasePipe],
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.scss",
 })
@@ -56,7 +56,6 @@ export class AppComponent {
 
   constructor(
     private readonly habiticaService: HabiticaService,
-    private readonly titleCasePipe: TitleCasePipe,
     private readonly contextService: ContextService,
     private readonly fb: NonNullableFormBuilder,
   ) {}

@@ -432,7 +432,7 @@
     </div>
 
     <div *ngIf="!!username" class="card">
-      <p-tabView>
+      <p-tabView [activeIndex]="1">
         <!-- Stats -->
         <p-tabPanel header="Stats">
           <ng-template pTemplate="header">
@@ -442,6 +442,18 @@
 
           <ng-template pTemplate="content">
             <app-stats-tab></app-stats-tab>
+          </ng-template>
+        </p-tabPanel>
+
+        <!-- Grouped by sets -->
+        <p-tabPanel header="Stats">
+          <ng-template pTemplate="header">
+            <i class="pi pi-box"></i>&nbsp;
+            <span>By sets</span>
+          </ng-template>
+
+          <ng-template pTemplate="content">
+            <app-grouped-by-sets-tab></app-grouped-by-sets-tab>
           </ng-template>
         </p-tabPanel>
 

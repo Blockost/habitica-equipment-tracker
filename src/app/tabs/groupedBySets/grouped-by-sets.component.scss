@@ -1,0 +1,21 @@
+.set-list {
+  gap: 1rem;
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+
+  p-card {
+    .card-content {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .item-row {
+      display: flex;
+      align-items: center;
+
+      img {
+        width: 4rem;
+      }
+    }
+  }
+}

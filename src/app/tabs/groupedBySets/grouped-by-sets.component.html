@@ -1,0 +1,34 @@
+<h2>Armoire sets</h2>
+
+<div class="set-list">
+  <p-card *ngFor="let set of gearsBySet">
+    <ng-template pTemplate="title">
+      {{ set.key }}
+    </ng-template>
+
+    <ng-template pTemplate="subtitle">
+      {{ set.value.nbItemsOwned + " out of " + set.value.nbOfItemsInSet + " owned" }}
+    </ng-template>
+
+    <ng-template pTemplate="content">
+      <div class="card-content">
+        <div *ngFor="let item of set.value.items; index as i">
+          <div class="item-row">
+            <img [src]="item.gear.icon" [alt]="item.gear.key" />
+            <span>{{ item.gear.name }}</span>
+          </div>
+          <p-divider *ngIf="i < set.value.items.length" />
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <div class="flex gap-3 mt-1">
+        <!-- View owned (or all?) gears on character -->
+        <p-button label="View" icon="pi pi-eye" severity="secondary" disabled="true" />
+        <!-- Equip all owned gears in the set -->
+        <p-button label="Equip" icon="pi pi-sparkles" />
+      </div>
+    </ng-template>
+  </p-card>
+</div>
