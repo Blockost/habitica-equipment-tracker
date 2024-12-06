@@ -1,3 +1,15 @@
+@import "primeflex/core/variables";
+
+.main-content {
+  max-width: 1000px;
+  min-width: 315px;
+  overflow-x: auto;
+
+  @media screen and (max-width: $lg) {
+    max-width: 100%;
+  }
+}
+
 .credentials-form {
   display: flex;
   flex-direction: column;

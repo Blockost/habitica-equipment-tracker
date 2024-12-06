@@ -1,6 +1,6 @@
 <h2>Armoire sets</h2>
 
-<div class="set-list">
+<div class="card-list">
   <p-card *ngFor="let set of gearsBySet">
     <ng-template pTemplate="title">
       {{ set.key }}
@@ -25,9 +25,13 @@
     <ng-template pTemplate="footer">
       <div class="flex gap-3 mt-1">
         <!-- View owned (or all?) gears on character -->
-        <p-button label="View" icon="pi pi-eye" severity="secondary" disabled="true" />
+        <span pTooltip="Not yet available">
+          <p-button label="View" icon="pi pi-eye" severity="secondary" disabled="true" />
+        </span>
         <!-- Equip all owned gears in the set -->
-        <p-button label="Equip" icon="pi pi-sparkles" />
+        <span pTooltip="Not yet available">
+          <p-button label="Equip" icon="pi pi-sparkles" disabled="true" />
+        </span>
       </div>
     </ng-template>
   </p-card>

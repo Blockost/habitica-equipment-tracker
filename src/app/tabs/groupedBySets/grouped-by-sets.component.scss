@@ -1,9 +1,11 @@
-.set-list {
+.card-list {
   gap: 1rem;
   display: grid;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
 
   p-card {
+    width: 230px;
+
     .card-content {
       max-height: 200px;
       overflow-y: auto;

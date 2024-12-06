@@ -7,6 +7,7 @@ import { ButtonModule } from "primeng/button";
 import { NgForOf, NgIf } from "@angular/common";
 import { DividerModule } from "primeng/divider";
 import { HabiticaGearVM, mapToVM } from "../../models/vm.model";
+import { TooltipModule } from "primeng/tooltip";
 
 const NO_SET_KEY = "NO_SET";
 
@@ -21,7 +22,7 @@ interface GearSetVM {
   standalone: true,
   templateUrl: "./grouped-by-sets.component.html",
   styleUrls: ["./grouped-by-sets.component.scss"],
-  imports: [CardModule, ButtonModule, NgForOf, DividerModule, NgIf],
+  imports: [CardModule, ButtonModule, NgForOf, DividerModule, NgIf, TooltipModule],
 })
 export class GroupedBySetsTabComponent implements OnInit {
   owned!: string[];
