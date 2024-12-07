@@ -1,0 +1,49 @@
+on:
+  workflow_dispatch:
+
+# Release a new version with git tag, Github release + artifact uploading
+name: CI
+
+jobs:
+  
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Update project version via npm. Dicards "v" prefix
+      - name: Update project version
+        id: update-version
+        run: |
+          export newVersion=$(npm --no-git-tag-version version patch)
+          echo ::set-output name=newVersion::${newVersion:1}
+
+      # Build project (keep it simple)
+      - name: Build project
+        run: npm install && npm run build
+
+      # Commit and push new release while retrieving commit hash
+      # that will be used to create tag in next step  
+      - name: Commit & push new version
+        id: push-new-version
+        run: |
+          git config --global user.name 'gh-action'
+          git config --global user.email 'gh-action@blockost.com'
+          git commit -am "Release ${{ steps.update-version.outputs.newVersion }}"
+          git push
+          echo ::set-output name=newCommitSha::$(git rev-parse HEAD)
+
+      - name: Create new release + upload build artifact
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ steps.update-version.outputs.newVersion }}
+          # Use empty description because we have nothing to say!
+          body: ""
+          tag_name: ${{ steps.update-version.outputs.newVersion }}
+          target_commitish: ${{ steps.push-new-version.outputs.newCommitSha }}
+          files: dist/habitica-equipment-tracker/browser
+          fail_on_unmatched_files: true
+
+    
+    
