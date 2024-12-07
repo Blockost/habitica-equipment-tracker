@@ -5,8 +5,7 @@ on:
 name: CI
 
 jobs:
-  
-  build:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -23,21 +22,16 @@ jobs:
       - name: Build project
         run: npm install && npm run build
 
-      - name: Check directory content
-        uses: jaywcjlove/github-action-folder-tree@main
-        with:
-          exclude: "node_modules|.git"
-          path: ./
-
       # Commit and push new release while retrieving commit hash
       # that will be used to create tag in next step  
-      - name: Commit & push new version
-        id: push-new-version
+      - name: Commit & push new version with tag
+        id: push-new-version-with-tag
         run: |
           git config --global user.name 'gh-action'
           git config --global user.email 'gh-action@blockost.com'
           git commit -am "Release $NEW_VERSION"
-          git push
+          git tag -a "$NEW_VERSION" -m "Release $NEW_VERSION"
+          git push --tags
           echo "NEW_COMMIT_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
 
       - name: Create new release + upload build artifact
@@ -46,7 +40,6 @@ jobs:
           name: $NEW_VERSION
           # Use empty description because we have nothing to say!
           body: ""
-          tag_name: $NEW_VERSION
           target_commitish: $NEW_COMMIT_SHA
           files: dist/habitica-equipment-tracker/browser/**/*
           fail_on_unmatched_files: true
