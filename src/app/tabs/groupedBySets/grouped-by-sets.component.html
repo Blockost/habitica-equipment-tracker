@@ -1,13 +1,15 @@
 <h2>Armoire sets</h2>
 
 <div class="card-list">
-  <p-card *ngFor="let set of gearsBySet">
+  <p-card *ngFor="let set of gearSets">
     <ng-template pTemplate="title">
       {{ set.key }}
     </ng-template>
 
     <ng-template pTemplate="subtitle">
-      {{ set.value.nbItemsOwned + " out of " + set.value.nbOfItemsInSet + " owned" }}
+      {{ set.value.nbItemsOwned + " out of " + set.value.nbOfItemsInSet + " owned" }} ({{
+        set.value.progression
+      }}%)
     </ng-template>
 
     <ng-template pTemplate="content">
@@ -15,7 +17,12 @@
         <div *ngFor="let item of set.value.items; index as i">
           <div class="item-row">
             <img [src]="item.gear.icon" [alt]="item.gear.key" />
-            <span>{{ item.gear.name }}</span>
+            <div>
+              <span>{{ item.gear.name }}</span> &nbsp;
+              <p-tag *ngIf="item.gear.owned" severity="success" value="">
+                <i class="pi pi-check" style="font-size: 0.8rem"></i>
+              </p-tag>
+            </div>
           </div>
           <p-divider *ngIf="i < set.value.items.length" />
         </div>

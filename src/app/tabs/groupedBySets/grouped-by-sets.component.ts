@@ -8,13 +8,14 @@ import { NgForOf, NgIf } from "@angular/common";
 import { DividerModule } from "primeng/divider";
 import { HabiticaGearVM, mapToVM } from "../../models/vm.model";
 import { TooltipModule } from "primeng/tooltip";
-
-const NO_SET_KEY = "NO_SET";
+import { TagModule } from "primeng/tag";
+import { round } from "../../util/util";
 
 interface GearSetVM {
   nbOfItemsInSet: number;
   nbItemsOwned: number;
-  items: { gear: HabiticaGearVM; owned: boolean }[];
+  progression: number;
+  items: { gear: HabiticaGearVM }[];
 }
 
 @Component({
@@ -22,11 +23,11 @@ interface GearSetVM {
   standalone: true,
   templateUrl: "./grouped-by-sets.component.html",
   styleUrls: ["./grouped-by-sets.component.scss"],
-  imports: [CardModule, ButtonModule, NgForOf, DividerModule, NgIf, TooltipModule],
+  imports: [CardModule, ButtonModule, NgForOf, DividerModule, NgIf, TooltipModule, TagModule],
 })
 export class GroupedBySetsTabComponent implements OnInit {
   owned!: string[];
-  readonly gearsBySet: { key: string; value: GearSetVM }[] = [];
+  readonly gearSets: { key: string; value: GearSetVM }[] = [];
 
   constructor(
     private readonly gearService: GearService,
@@ -47,25 +48,21 @@ export class GroupedBySetsTabComponent implements OnInit {
     const gears = content.gear.flat;
     Object.values(gears)
       .filter((item) => item.klass === "armoire")
-      .forEach((item) => this.addToMap(item));
+      .forEach((item) => this.updateSet(item));
 
-    console.log("gearsBySet:", this.gearsBySet);
+    console.log("gearsBySet:", this.gearSets);
+
+    this.gearSets.sort((setA, setB) => {
+      const order = setB.value.progression - setA.value.progression;
+      if (order === 0) {
+        return setA.key.localeCompare(setB.key);
+      }
+
+      return order;
+    });
   }
 
-  private addToMap(gear: HabiticaGear) {
-    if (gear === undefined) {
-      return;
-    }
-
-    if (gear.set === undefined || gear.set?.trim()?.length < 1) {
-      this.updateSet(NO_SET_KEY, gear);
-      return;
-    }
-
-    this.updateSet(gear.set, gear);
-  }
-
-  private updateSet(name: string, gear: HabiticaGear) {
+  private updateSet(gear: HabiticaGear) {
     const gearVM = mapToVM(gear);
     if (gearVM.set === "-") {
       // Do not show unique items that are not part of a set
@@ -73,28 +70,43 @@ export class GroupedBySetsTabComponent implements OnInit {
       return;
     }
 
+    if (gearVM.set === "Cleaning Supplies Set Two") {
+      // There is a discrepancy in the data we receive from Habitica. These two sets are the same.
+      // In the app, only "Set 2" is shown. Remove this when Habitica has fixed the set name on their side
+      gearVM.set = "Cleaning Supplies Set 2";
+    }
+
     gearVM.owned = this.isGearOwned(gear);
-    const set = this.gearsBySet.find((set) => set.key === gearVM.set);
+    const set = this.gearSets.find((set) => set.key === gearVM.set);
+
+    if (gearVM.set === "Jeweler Set") {
+      console.log("Jeweler Set", set);
+    }
 
     if (!!set) {
-      const owned = this.isGearOwned(gear);
       set.value.nbOfItemsInSet += 1;
-      set.value.nbItemsOwned += owned ? 1 : 0;
-      set.value.items.push({ gear: gearVM, owned });
+      set.value.nbItemsOwned += gearVM.owned ? 1 : 0;
+      set.value.progression = this.getProgression(set);
+      set.value.items.push({ gear: gearVM });
     } else {
       const set: { key: string; value: GearSetVM } = {
         key: gearVM.set,
         value: {
           nbOfItemsInSet: 1,
-          nbItemsOwned: 0,
-          items: [{ gear: gearVM, owned: false }],
+          nbItemsOwned: gearVM.owned ? 1 : 0,
+          progression: gearVM.owned ? 100 : 0,
+          items: [{ gear: gearVM }],
         },
       };
-      this.gearsBySet.push(set);
+      this.gearSets.push(set);
     }
   }
 
   private isGearOwned(gear: HabiticaGear): boolean {
-    return false;
+    return this.owned.includes(gear.key);
+  }
+
+  private getProgression(set: { key: string; value: GearSetVM }) {
+    return round(set.value.nbItemsOwned / set.value.nbOfItemsInSet) * 100;
   }
 }
