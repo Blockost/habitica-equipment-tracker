@@ -50,8 +50,6 @@ export class GroupedBySetsTabComponent implements OnInit {
       .filter((item) => item.klass === "armoire")
       .forEach((item) => this.updateSet(item));
 
-    console.log("gearsBySet:", this.gearSets);
-
     this.gearSets.sort((setA, setB) => {
       const order = setB.value.progression - setA.value.progression;
       if (order === 0) {
@@ -78,10 +76,6 @@ export class GroupedBySetsTabComponent implements OnInit {
 
     gearVM.owned = this.isGearOwned(gear);
     const set = this.gearSets.find((set) => set.key === gearVM.set);
-
-    if (gearVM.set === "Jeweler Set") {
-      console.log("Jeweler Set", set);
-    }
 
     if (!!set) {
       set.value.nbOfItemsInSet += 1;

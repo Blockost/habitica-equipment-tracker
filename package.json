@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "genversion -es version.ts && ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "genversion": "genversion"
