@@ -19,7 +19,6 @@ export class StatsService {
 
   async getStats(): Promise<StatsModel> {
     const ownedArmoire = await this.gearService.getOwnedArmoire();
-    const progression = ownedArmoire?.length;
     const allContent = await this.habiticaService.getAllContent();
     const allArmoire = Object.values(allContent.gear.flat).filter(
       (item) => item.klass === "armoire",

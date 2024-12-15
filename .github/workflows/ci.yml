@@ -23,7 +23,7 @@ jobs:
         run: npm install && npm run build
 
       # Commit and push new release while retrieving commit hash
-      # that will be used to create tag in next step  
+      # that will be used to create tag in next step
       - name: Commit & push new version with tag
         id: push-new-version-with-tag
         run: |
@@ -48,6 +48,3 @@ jobs:
           target_commitish: ${{ env.NEW_COMMIT_SHA }}
           files: dist/habitica-equipment-tracker/browser/build.zip
           fail_on_unmatched_files: true
-
-    
-    
