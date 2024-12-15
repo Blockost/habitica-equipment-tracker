@@ -17,16 +17,12 @@ export class StatsTabComponent implements OnInit {
   constructor(private readonly statsService: StatsService) {}
 
   async ngOnInit(): Promise<void> {
-    console.log("StatsTabComponent init now!");
-
     this.stats = await this.statsService.getStats();
     const percentage = Math.fround(this.stats.nbItemsOwned / this.stats.nbItemsTotal);
-
-    console.log(percentage, round(percentage));
     this.meterItems = [
       {
         label: `Items owned (${this.stats.nbItemsOwned} out of ${this.stats.nbItemsTotal} items in total)`,
-        value: round(percentage),
+        value: round(percentage) * 100,
         color: "var(--primary-color)",
       },
     ];
