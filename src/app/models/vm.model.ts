@@ -14,6 +14,9 @@ export interface HabiticaGearVM {
   setFullName: string;
   type: string;
   owned: boolean;
+  equipped: boolean;
+  equippedAsCostume: boolean;
+  loading: boolean;
 }
 
 export function mapToVM(gear: HabiticaGear): HabiticaGearVM {
@@ -27,9 +30,11 @@ export function mapToVM(gear: HabiticaGear): HabiticaGearVM {
     set: setName,
     setIndex: setIndex,
     setFullName: mapSetFullName(setName, setIndex),
-    // TODO 2024-11-27 Blockost Use title case here
     type: gear.type,
-    owned: false,
+    owned: false, // Set when mapping
+    equipped: false, // Set when mapping
+    equippedAsCostume: false, // Set when mapping
+    loading: false,
   };
 }
 

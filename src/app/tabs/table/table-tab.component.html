@@ -110,8 +110,28 @@
         <td>{{ vm.setFullName }}</td>
         <td>{{ vm.type }}</td>
         <td>
-          <p-tag *ngIf="vm.owned" severity="success" value="Owned" />
-          <p-tag *ngIf="!vm.owned" severity="warning" value="Not owned" />
+          <ng-container *ngIf="vm.owned">
+            <p-tag severity="success" value="Owned" />
+
+            <div class="mt-1 flex">
+              <p-button (onClick)="equipBattleGear(vm)" icon="pi pi-shield"
+                        [loading]="vm.loading" size="small"
+                        [severity]="vm.equipped ? 'danger' : 'secondary'"
+                        [pTooltip]="vm.equipped ? 'Unequip battle gear' : 'Equip as battle gear'">
+              </p-button>
+
+              <p-button (onClick)="equipCostume(vm)" icon="pi pi-sparkles"
+                        [loading]="vm.loading" size="small"
+                        [severity]="vm.equippedAsCostume ? 'danger' : 'secondary'"
+                        [pTooltip]="vm.equippedAsCostume ? 'Unequip costume' : 'Equip as costume'"
+                        class="ml-1">
+              </p-button>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="!vm.owned">
+            <p-tag severity="warning" value="Not owned" />
+          </ng-container>
         </td>
       </tr>
     </ng-template>

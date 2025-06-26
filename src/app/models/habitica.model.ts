@@ -53,9 +53,17 @@ export interface HabiticaUserInfo {
       username: string;
     };
   };
-  items: {
-    gear: {
-      owned: { [key: string]: boolean };
-    };
+  items: HabiticaUserItemsInfo;
+}
+
+export interface HabiticaUserItemsInfo {
+  gear: {
+    equipped: { [key: string]: string };
+    costume: { [key: string]: string };
+    owned: { [key: string]: boolean };
   };
+}
+
+export interface HabiticaEquipItemResponse extends BaseHabiticaResponse<HabiticaUserItemsInfo> {
+  message?: string; // Only when unequipping an item
 }

@@ -1,13 +1,16 @@
 import { CachedItem } from "./cache.model";
+import { VariableStorage } from "../util/variableStorage";
 
-export function Cacheable(cacheName?: string): MethodDecorator {
+const variableStorage = new VariableStorage();
+
+export function Cacheable(cacheName?: string, variable = false): MethodDecorator {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     const key = cacheName ?? propertyKey.toString();
     const originalMethod = descriptor.value as (...args: any[]) => Promise<any>;
 
     descriptor.value = async function (...args: any[]) {
       console.debug("Looking into local storage for cached data");
-      const cached = localStorage.getItem(key);
+      const cached = getStorageProvider(variable).getItem(key);
 
       if (cached != null) {
         console.debug("Cached data found");
@@ -36,9 +39,13 @@ export function Cacheable(cacheName?: string): MethodDecorator {
         expiry: 3600,
         data: res,
       };
-      localStorage.setItem(key, JSON.stringify(toCache));
+      getStorageProvider(variable).setItem(key, JSON.stringify(toCache));
 
       return res;
     };
   };
+}
+
+function getStorageProvider(session: boolean): Storage {
+  return session ? variableStorage : localStorage;
 }

@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HabiticaService } from "./habitica.service";
 import { ContextService } from "./context.service";
+import { HabiticaUserItemsInfo } from "../models/habitica.model";
 
 @Injectable({ providedIn: "root" })
 export class GearService {
@@ -22,5 +23,41 @@ export class GearService {
     );
     console.log("Armoire owned", ownedArmoire);
     return ownedArmoire;
+  }
+
+  async getEquippedItems(): Promise<string[]> {
+    const userId = this.context.userId;
+    const token = this.context.apiToken;
+    const userInfo = await this.habiticaService.getUserInfo(userId, token);
+
+    const equipped = userInfo.items.gear.equipped;
+    console.log("Equipped items", equipped);
+
+    return Object.values(equipped);
+  }
+
+  async getCostumeItems(): Promise<string[]> {
+    const userId = this.context.userId;
+    const token = this.context.apiToken;
+    const userInfo = await this.habiticaService.getUserInfo(userId, token);
+
+    const equipped = userInfo.items.gear.costume;
+    console.log("Costume items", equipped);
+
+    return Object.values(equipped);
+  }
+
+  async equipBattleGear(gearKey: string): Promise<HabiticaUserItemsInfo> {
+    const userId = this.context.userId;
+    const token = this.context.apiToken;
+
+    return await this.habiticaService.equipItem(userId, token, "equipped", gearKey);
+  }
+
+  async equipCostume(gearKey: string): Promise<HabiticaUserItemsInfo> {
+    const userId = this.context.userId;
+    const token = this.context.apiToken;
+
+    return await this.habiticaService.equipItem(userId, token, "costume", gearKey);
   }
 }
