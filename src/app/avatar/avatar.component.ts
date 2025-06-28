@@ -28,9 +28,8 @@ export class AvatarComponent {
 
   constructor(
     private readonly gearService: GearService,
-    private readonly userService: UserService
-  ) {
-  }
+    private readonly userService: UserService,
+  ) {}
 
   async ngOnInit(): Promise<void> {
     this.loading = true;

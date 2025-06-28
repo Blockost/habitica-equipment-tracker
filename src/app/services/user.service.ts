@@ -7,9 +7,8 @@ import { HabiticaUserPreferences } from "../models/habitica.model";
 export class UserService {
   constructor(
     private readonly context: ContextService,
-    private readonly habiticaService: HabiticaService
-  ) {
-  }
+    private readonly habiticaService: HabiticaService,
+  ) {}
 
   async getUserPreferences(): Promise<HabiticaUserPreferences> {
     const userId = this.context.userId;
