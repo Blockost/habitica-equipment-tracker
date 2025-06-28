@@ -1,0 +1,30 @@
+.habitica-avatar-container {
+  position: relative;
+  width: 141px;
+  height: 147px;
+  padding-top: 24px;
+  image-rendering: pixelated;
+  //margin-bottom: -.5rem !important;
+  background-color: lightblue;
+
+  .character-sprites {
+    width: 90px;
+    height: 90px;
+    display: inline-flex;
+
+    // TODO: 2025-06-26 Blockost Update this to use value from user info
+    .skin {
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      background-image: url(https://habitica-assets.s3.amazonaws.com/mobileApp/images/skin_f5a76e.png)
+    }
+
+    .sprite-container {
+      position: absolute;
+      width: 90px;
+      height: 90px;
+    }
+
+  }
+}

@@ -104,8 +104,8 @@ export class TableTabComponent implements OnInit {
     console.log(content);
 
     this.owned = await this.gearService.getOwnedArmoire();
-    this.equipped = await this.gearService.getEquippedItems();
-    this.costume = await this.gearService.getCostumeItems();
+    this.equipped = Object.values(await this.gearService.getEquippedItems());
+    this.costume = Object.values(await this.gearService.getCostumeItems());
 
     const gears = content.gear.flat;
     this.gears = Object.values(gears)

@@ -1,0 +1,30 @@
+<div *ngIf="!loading " class="habitica-avatar-container">
+  <div *ngIf="costume" class="character-sprites">
+    <span class="skin"></span>
+    <span class="sprite-container">
+      <img
+        [src]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/broad_'+costume.armor+'.png'"
+        class="character-sprite" alt="armor">
+    </span>
+    <span class="sprite-container">
+      <img
+        [src]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/'+costume.head+'.png'"
+        class="character-sprite" alt="head">
+    </span>
+    <span class="sprite-container">
+      <img
+        [src]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/broad_'+costume.back+'.png'"
+        class="character-sprite" alt="back">
+    </span>
+    <span class="sprite-container">
+      <img
+        [src]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/'+costume.shield+'.png'"
+        class="character-sprite" alt="shield or offhand weapon">
+    </span>
+    <span class="sprite-container">
+      <img
+        [src]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/'+costume.weapon+'.png'"
+        class="character-sprite" alt="weapon">
+    </span>
+  </div>
+</div>

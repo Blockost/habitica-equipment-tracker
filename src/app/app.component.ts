@@ -1,28 +1,29 @@
-import { Component } from "@angular/core";
-import { RouterOutlet } from "@angular/router";
-import { HabiticaService } from "./services/habitica.service";
-import { TableModule } from "primeng/table";
-import { NgIf } from "@angular/common";
-import { TagModule } from "primeng/tag";
-import { ButtonModule } from "primeng/button";
+import { Component, ViewChild } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { HabiticaService } from './services/habitica.service';
+import { TableModule } from 'primeng/table';
+import { NgIf } from '@angular/common';
+import { TagModule } from 'primeng/tag';
+import { ButtonModule } from 'primeng/button';
 import {
   FormGroup,
   FormsModule,
   NonNullableFormBuilder,
   ReactiveFormsModule,
-  Validators,
-} from "@angular/forms";
-import { InputTextModule } from "primeng/inputtext";
-import { IconFieldModule } from "primeng/iconfield";
-import { InputIconModule } from "primeng/inputicon";
-import { PanelModule } from "primeng/panel";
-import { CheckboxModule } from "primeng/checkbox";
-import { ContextService } from "./services/context.service";
-import { AccordionModule } from "primeng/accordion";
-import { TabViewModule } from "primeng/tabview";
-import { StatsTabComponent } from "./tabs/stats/stats-tab.component";
-import { TableTabComponent } from "./tabs/table/table-tab.component";
-import { GroupedBySetsTabComponent } from "./tabs/groupedBySets/grouped-by-sets.component";
+  Validators
+} from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { PanelModule } from 'primeng/panel';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ContextService } from './services/context.service';
+import { Accordion, AccordionModule } from 'primeng/accordion';
+import { TabViewModule } from 'primeng/tabview';
+import { StatsTabComponent } from './tabs/stats/stats-tab.component';
+import { TableTabComponent } from './tabs/table/table-tab.component';
+import { GroupedBySetsTabComponent } from './tabs/groupedBySets/grouped-by-sets.component';
+import { AvatarComponent } from './avatar/avatar.component';
 
 @Component({
   selector: "app-root",
@@ -45,14 +46,18 @@ import { GroupedBySetsTabComponent } from "./tabs/groupedBySets/grouped-by-sets.
     StatsTabComponent,
     TableTabComponent,
     GroupedBySetsTabComponent,
+    AvatarComponent,
   ],
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.scss",
 })
 export class AppComponent {
   formGroup!: FormGroup;
-
   username = "";
+  loading = false;
+
+  @ViewChild'accordion'")
+  private readonly accordion!: Accordion;
 
   constructor(
     private readonly habiticaService: HabiticaService,
@@ -95,10 +100,14 @@ export class AppComponent {
       throw new Error("Save locally consent cannot be null");
     }
 
+    this.loading = true;
     this.contextService.save(userId, apiToken, saveLocally);
 
     const userInfo = await this.habiticaService.getUserInfo(userId, apiToken);
     this.username = userInfo.auth.local.username;
+
+    this.loading = false;
+    this.accordion.activeIndex = 1;
   }
 
   async refresh(): Promise<void> {

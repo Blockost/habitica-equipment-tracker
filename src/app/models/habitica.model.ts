@@ -56,10 +56,21 @@ export interface HabiticaUserInfo {
   items: HabiticaUserItemsInfo;
 }
 
+export interface EquipmentSetInfo {
+  weapon: string;
+  armor: string;
+  head: string;
+  shield: string;
+  back: string;
+  headAccessory: string;
+  eyewear: string;
+  body: string;
+}
+
 export interface HabiticaUserItemsInfo {
   gear: {
-    equipped: { [key: string]: string };
-    costume: { [key: string]: string };
+    equipped: EquipmentSetInfo;
+    costume: EquipmentSetInfo;
     owned: { [key: string]: boolean };
   };
 }
