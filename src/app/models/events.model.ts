@@ -1,0 +1,3 @@
+export enum AppEvent {
+  USER_ITEMS_INFO_UPDATED = "USER_ITEMS_INFO_UPDATED",
+}

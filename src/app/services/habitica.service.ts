@@ -10,6 +10,8 @@ import {
   HabiticaUserItemsInfo,
 } from "../models/habitica.model";
 import { Cacheable } from "../cache/cacheable.decorator";
+import { AppEventManager } from "./event/event-manager";
+import { AppEvent } from "../models/events.model";
 
 const HABITICA_ROOT_URL = "https://habitica.com/api/v3";
 
@@ -28,7 +30,10 @@ const X_API_USER_HEADER = "x-api-user";
   providedIn: "root",
 })
 export class HabiticaService {
-  constructor(private readonly httpClient: HttpClient) {}
+  constructor(
+    private readonly httpClient: HttpClient,
+    private eventManager: AppEventManager,
+  ) {}
 
   @Cacheable(HABITICA_ALL_CONTENT_RESPONSE)
   public async getAllContent(): Promise<HabiticaAllContentData> {
@@ -88,7 +93,13 @@ export class HabiticaService {
       throw new Error("Failed to equip/unequip item", { cause: habRes.message });
     }
 
-    return habRes.data;
+    const itemsInfo = habRes.data;
+    this.eventManager.broadcast<HabiticaUserItemsInfo>({
+      name: AppEvent.USER_ITEMS_INFO_UPDATED,
+      content: itemsInfo,
+    });
+
+    return itemsInfo;
   }
 
   private getDefaultAuthenticatedHeaders(userId: string, apiToken: string): HttpHeaders {
