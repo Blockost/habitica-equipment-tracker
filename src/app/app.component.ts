@@ -1,29 +1,23 @@
-import { Component, ViewChild } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { HabiticaService } from './services/habitica.service';
-import { TableModule } from 'primeng/table';
-import { NgIf } from '@angular/common';
-import { TagModule } from 'primeng/tag';
-import { ButtonModule } from 'primeng/button';
-import {
-  FormGroup,
-  FormsModule,
-  NonNullableFormBuilder,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { PanelModule } from 'primeng/panel';
-import { CheckboxModule } from 'primeng/checkbox';
-import { ContextService } from './services/context.service';
-import { Accordion, AccordionModule } from 'primeng/accordion';
-import { TabViewModule } from 'primeng/tabview';
-import { StatsTabComponent } from './tabs/stats/stats-tab.component';
-import { TableTabComponent } from './tabs/table/table-tab.component';
-import { GroupedBySetsTabComponent } from './tabs/groupedBySets/grouped-by-sets.component';
-import { AvatarComponent } from './avatar/avatar.component';
+import { Component, ViewChild } from "@angular/core";
+import { RouterOutlet } from "@angular/router";
+import { HabiticaService } from "./services/habitica.service";
+import { TableModule } from "primeng/table";
+import { NgIf } from "@angular/common";
+import { TagModule } from "primeng/tag";
+import { ButtonModule } from "primeng/button";
+import { FormGroup, FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { InputTextModule } from "primeng/inputtext";
+import { IconFieldModule } from "primeng/iconfield";
+import { InputIconModule } from "primeng/inputicon";
+import { PanelModule } from "primeng/panel";
+import { CheckboxModule } from "primeng/checkbox";
+import { ContextService } from "./services/context.service";
+import { Accordion, AccordionModule } from "primeng/accordion";
+import { TabViewModule } from "primeng/tabview";
+import { StatsTabComponent } from "./tabs/stats/stats-tab.component";
+import { TableTabComponent } from "./tabs/table/table-tab.component";
+import { GroupedBySetsTabComponent } from "./tabs/groupedBySets/grouped-by-sets.component";
+import { AvatarComponent } from "./avatar/avatar.component";
 
 @Component({
   selector: "app-root",
@@ -56,7 +50,7 @@ export class AppComponent {
   username = "";
   loading = false;
 
-  @ViewChild'accordion'")
+  @ViewChild("accordion")
   private readonly accordion!: Accordion;
 
   constructor(

@@ -30,10 +30,7 @@ export class GearService {
     const token = this.context.apiToken;
     const userInfo = await this.habiticaService.getUserInfo(userId, token);
 
-    const equipped = userInfo.items.gear.equipped;
-    console.log("Equipped items", equipped);
-
-    return equipped;
+    return userInfo.items.gear.equipped;
   }
 
   async getCostumeItems(): Promise<EquipmentSetInfo> {
@@ -41,10 +38,7 @@ export class GearService {
     const token = this.context.apiToken;
     const userInfo = await this.habiticaService.getUserInfo(userId, token);
 
-    const costume = userInfo.items.gear.costume;
-    console.log("Costume items", costume);
-
-    return costume;
+    return userInfo.items.gear.costume;
   }
 
   async equipBattleGear(gearKey: string): Promise<HabiticaUserItemsInfo> {

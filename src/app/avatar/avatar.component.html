@@ -1,30 +1,61 @@
-<div *ngIf="!loading " class="habitica-avatar-container">
-  <div *ngIf="costume" class="character-sprites">
-    <span class="skin"></span>
+<div *ngIf="!loading && avatarInfoVm" class="habitica-avatar-container"
+     [ngStyle]="{'background': 'url(https://habitica-assets.s3.amazonaws.com/mobileApp/images/background_'+avatarInfoVm.bgColor+'.png)'}">
+  <div class="character-sprites">
+    <!-- Skin -->
     <span class="sprite-container">
-      <img
-        [src]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/broad_'+costume.armor+'.png'"
-        class="character-sprite" alt="armor">
+      <img *ngIf="avatarInfoVm.skinColor && avatarInfoVm.bodyType"
+           [ngSrc]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/skin_'+avatarInfoVm.skinColor+'.png'"
+           width="90" height="90"
+           class="character-sprite" alt="Skin">
     </span>
+    <!-- Shirt (hidden behind armor if any) -->
     <span class="sprite-container">
-      <img
-        [src]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/'+costume.head+'.png'"
-        class="character-sprite" alt="head">
+      <img *ngIf="avatarInfoVm.shirtColor && avatarInfoVm.bodyType"
+           [ngSrc]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/'+avatarInfoVm.bodyType+'_shirt_'+avatarInfoVm.shirtColor+'.png'"
+           width="90" height="90"
+           class="character-sprite" alt="Shirt">
     </span>
+    <!-- Armor -->
     <span class="sprite-container">
-      <img
-        [src]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/broad_'+costume.back+'.png'"
-        class="character-sprite" alt="back">
+      <img *ngIf="avatarInfoVm.armor"
+           [ngSrc]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/broad_'+avatarInfoVm.armor+'.png'"
+           width="114" height="90"
+           class="character-sprite" alt="Armor item">
     </span>
+    <!-- Hair -->
     <span class="sprite-container">
-      <img
-        [src]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/'+costume.shield+'.png'"
-        class="character-sprite" alt="shield or offhand weapon">
+      <img *ngIf="avatarInfoVm.hairType && avatarInfoVm.hairColor"
+           [ngSrc]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/hair_bangs_'+avatarInfoVm.hairType+'_'+avatarInfoVm.hairColor+'.png'"
+           width="90" height="90"
+           class="character-sprite" alt="Hair">
     </span>
+    <!-- Head/Helmet -->
     <span class="sprite-container">
-      <img
-        [src]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/'+costume.weapon+'.png'"
-        class="character-sprite" alt="weapon">
+      <img *ngIf="avatarInfoVm.head"
+           [ngSrc]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/'+avatarInfoVm.head+'.png'"
+           width="114" height="90"
+           class="character-sprite" alt="Head/helmet item">
+    </span>
+    <!-- Back -->
+    <span class="sprite-container">
+      <img *ngIf="avatarInfoVm.back"
+           [ngSrc]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/broad_'+avatarInfoVm.back+'.png'"
+           width="90" height="90"
+           class="character-sprite" alt="Back item">
+    </span>
+    <!-- Shield/off-hand item -->
+    <span class="sprite-container">
+      <img *ngIf="avatarInfoVm.shield"
+           [ngSrc]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/'+avatarInfoVm.shield+'.png'"
+           width="114" height="90"
+           class="character-sprite" alt="Off-hand item">
+    </span>
+    <!-- Main-hand item -->
+    <span class="sprite-container">
+      <img *ngIf="avatarInfoVm.weapon"
+           [ngSrc]="'https://habitica-assets.s3.amazonaws.com/mobileApp/images/'+avatarInfoVm.weapon+'.png'"
+           width="114" height="90"
+           class="character-sprite" alt="Main-hand item">
     </span>
   </div>
 </div>

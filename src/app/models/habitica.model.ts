@@ -54,6 +54,7 @@ export interface HabiticaUserInfo {
     };
   };
   items: HabiticaUserItemsInfo;
+  preferences: HabiticaUserPreferences;
 }
 
 export interface EquipmentSetInfo {
@@ -72,6 +73,22 @@ export interface HabiticaUserItemsInfo {
     equipped: EquipmentSetInfo;
     costume: EquipmentSetInfo;
     owned: { [key: string]: boolean };
+  };
+}
+
+export interface HabiticaUserPreferences {
+  size: string;
+  skin: string;
+  shirt: string;
+  costume: boolean;
+  background: string;
+  hair: {
+    color: string;
+    base: number;
+    bangs: number;
+    beard: number;
+    mustache: number;
+    flower: number;
   };
 }
 
