@@ -52,4 +52,4 @@ jobs:
       - name: Trigger deployment
         run: gh workflow run deploy.yml -f "version=${{ env.NEW_VERSION }}"
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is automatically created by the worklow
