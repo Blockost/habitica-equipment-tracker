@@ -26,3 +26,24 @@
     color: var(--blue-400);
   }
 }
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .app-logo {
+    max-width: 9.2rem;
+    height: auto;
+  }
+
+  .title {
+    margin-bottom: 1rem;
+  }
+
+  .app-version {
+    display: inline-flex;
+  }
+}
+
+

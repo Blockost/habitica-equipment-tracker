@@ -2,7 +2,7 @@ import { Component, ViewChild } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { HabiticaService } from "./services/habitica.service";
 import { TableModule } from "primeng/table";
-import { NgIf } from "@angular/common";
+import { NgIf, NgOptimizedImage } from "@angular/common";
 import { TagModule } from "primeng/tag";
 import { ButtonModule } from "primeng/button";
 import {
@@ -24,6 +24,7 @@ import { StatsTabComponent } from "./tabs/stats/stats-tab.component";
 import { TableTabComponent } from "./tabs/table/table-tab.component";
 import { GroupedBySetsTabComponent } from "./tabs/groupedBySets/grouped-by-sets.component";
 import { AvatarComponent } from "./avatar/avatar.component";
+import { version } from "../../version";
 
 @Component({
   selector: "app-root",
@@ -47,6 +48,7 @@ import { AvatarComponent } from "./avatar/avatar.component";
     TableTabComponent,
     GroupedBySetsTabComponent,
     AvatarComponent,
+    NgOptimizedImage,
   ],
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.scss",
@@ -55,6 +57,7 @@ export class AppComponent {
   formGroup!: FormGroup;
   username = "";
   loading = false;
+  version = version;
 
   @ViewChild("accordion")
   private readonly accordion!: Accordion;
