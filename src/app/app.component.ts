@@ -78,6 +78,10 @@ export class AppComponent {
       apiToken: [apiToken || "", [Validators.required]],
       saveLocally: [false, [Validators.required]],
     });
+
+    if (userId && apiToken) {
+      await this.submitUserCredentials();
+    }
   }
 
   async submitUserCredentials(): Promise<void> {
