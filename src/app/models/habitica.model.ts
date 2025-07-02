@@ -39,6 +39,10 @@ export interface HabiticaGear {
    * Type of equipment.
    */
   type: string;
+  /**
+   * Whether this item must be held in both hands. Only applies to weapon.
+   */
+  twoHanded?: boolean;
   str: number;
   int: number;
   con: number;

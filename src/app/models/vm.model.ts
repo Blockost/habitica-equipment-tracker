@@ -2,7 +2,7 @@ import { HabiticaGear } from "./habitica.model";
 
 const IMAGES_REPO_URL = `https://habitica-assets.s3.amazonaws.com/mobileApp/images`;
 const REGEXP = /Enchanted Armoire: (.*) \(Item (.*)\)/i;
-const REGEXP_ARMOIRE = /Enchanted Armoire: /i;
+const REGEXP_ARMOIRE = /Enchanted Armoire:.+?[.)]\.?/i;
 
 export interface HabiticaGearVM {
   key: string;
@@ -52,11 +52,15 @@ function mapDescription(gear: HabiticaGear): string {
   }
 
   const match = gear.notes.match(REGEXP_ARMOIRE);
-  if (match == null) {
+  if (match == null || match.length !== 1 || !match.index) {
     return gear.notes.trim();
   }
 
-  return gear.notes.slice(0, match.index).trim();
+  const matchSize = match["0"].length;
+  const startString = gear.notes.slice(0, match.index).trim();
+  const endString = gear.notes.slice(match.index + matchSize).trim();
+
+  return `${startString} ${endString}`;
 }
 
 function mapGearSet(gear: HabiticaGear): [string, string] {
