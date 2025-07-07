@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HabiticaService } from "./habitica.service";
 import { ContextService } from "./context.service";
-import { EquipmentSetInfo, HabiticaUserItemsInfo } from "../models/habitica.model";
+import { EquipmentSetInfo, HabiticaGear, HabiticaUserItemsInfo } from "../models/habitica.model";
 
 @Injectable({ providedIn: "root" })
 export class GearService {
@@ -9,6 +9,14 @@ export class GearService {
     private readonly context: ContextService,
     private readonly habiticaService: HabiticaService,
   ) {}
+
+  /**
+   * Returns an objet containing all available gears in Habitica.
+   */
+  async getAllGears(): Promise<{ [key: string]: HabiticaGear }> {
+    const content = await this.habiticaService.getAllContent();
+    return content.gear.flat;
+  }
 
   async getOwnedArmoire(): Promise<string[]> {
     const userId = this.context.userId;

@@ -41,11 +41,7 @@ export class TableTabComponent implements OnInit {
   private equipped: string[] = [];
   private costume: string[] = [];
 
-  constructor(
-    private readonly gearService: GearService,
-    // TODO 2024-11-18 Blockost HabiticaService should never be called from a component ! Change that !
-    private readonly habiticaService: HabiticaService,
-  ) {}
+  constructor(private readonly gearService: GearService) {}
 
   async ngOnInit(): Promise<void> {
     console.log("TableTabComponent init now!");
@@ -100,14 +96,11 @@ export class TableTabComponent implements OnInit {
   }
 
   private async fetchHabiticaContent() {
-    const content = await this.habiticaService.getAllContent();
-    console.log(content);
-
     this.owned = await this.gearService.getOwnedArmoire();
     this.equipped = Object.values(await this.gearService.getEquippedItems());
     this.costume = Object.values(await this.gearService.getCostumeItems());
 
-    const gears = content.gear.flat;
+    const gears = await this.gearService.getAllGears();
     this.gears = Object.values(gears)
       .filter((item) => item.klass === "armoire")
       .map((item) => this.mapToVM(item));

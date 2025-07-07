@@ -29,23 +29,16 @@ export class GroupedBySetsTabComponent implements OnInit {
   owned!: string[];
   readonly gearSets: { key: string; value: GearSetVM }[] = [];
 
-  constructor(
-    private readonly gearService: GearService,
-    // TODO 2024-11-18 Blockost HabiticaService should never be called from a component ! Change that !
-    private readonly habiticaService: HabiticaService,
-  ) {}
+  constructor(private readonly gearService: GearService) {}
 
   ngOnInit(): void {
     this.fetchHabiticaContent();
   }
 
   private async fetchHabiticaContent() {
-    const content = await this.habiticaService.getAllContent();
-    console.log(content);
-
     this.owned = await this.gearService.getOwnedArmoire();
 
-    const gears = content.gear.flat;
+    const gears = await this.gearService.getAllGears();
     Object.values(gears)
       .filter((item) => item.klass === "armoire")
       .forEach((item) => this.updateSet(item));

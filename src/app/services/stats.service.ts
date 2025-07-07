@@ -11,18 +11,12 @@ export interface StatsModel {
   providedIn: "root",
 })
 export class StatsService {
-  constructor(
-    private readonly gearService: GearService,
-    // TODO 2024-11-18 Blockost HabiticaService should never be called directly from a feature service !
-    private readonly habiticaService: HabiticaService,
-  ) {}
+  constructor(private readonly gearService: GearService) {}
 
   async getStats(): Promise<StatsModel> {
     const ownedArmoire = await this.gearService.getOwnedArmoire();
-    const allContent = await this.habiticaService.getAllContent();
-    const allArmoire = Object.values(allContent.gear.flat).filter(
-      (item) => item.klass === "armoire",
-    );
+    const gears = await this.gearService.getAllGears();
+    const allArmoire = Object.values(gears).filter((item) => item.klass === "armoire");
 
     return {
       nbItemsOwned: (ownedArmoire ?? []).length,
