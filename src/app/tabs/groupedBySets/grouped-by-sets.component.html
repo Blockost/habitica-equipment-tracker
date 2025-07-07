@@ -1,7 +1,14 @@
 <h2>Armoire sets</h2>
 
+<form class="flex mb-3" [formGroup]="formGroup">
+  <div class="flex gap-1">
+    <p-checkbox formControlName="showCompletedSets" inputId="showCompletedSets" [binary]="true" />
+    <label for="showCompletedSets">Show completed sets</label>
+  </div>
+</form>
+
 <div class="card-list">
-  <p-card *ngFor="let set of gearSets">
+  <p-card *ngFor="let set of gearSetsFiltered">
     <ng-template pTemplate="title">
       {{ set.key }}
     </ng-template>

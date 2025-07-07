@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { GearService } from "../../services/gear.service";
-import { HabiticaService } from "../../services/habitica.service";
 import { HabiticaGear } from "../../models/habitica.model";
 import { CardModule } from "primeng/card";
 import { ButtonModule } from "primeng/button";
@@ -10,6 +9,10 @@ import { HabiticaGearVM, mapToVM } from "../../models/vm.model";
 import { TooltipModule } from "primeng/tooltip";
 import { TagModule } from "primeng/tag";
 import { round } from "../../util/util";
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { CheckboxModule } from "primeng/checkbox";
+
+const SHOW_COMPLETED_SET = false;
 
 interface GearSetVM {
   nbOfItemsInSet: number;
@@ -23,16 +26,42 @@ interface GearSetVM {
   standalone: true,
   templateUrl: "./grouped-by-sets.component.html",
   styleUrls: ["./grouped-by-sets.component.scss"],
-  imports: [CardModule, ButtonModule, NgForOf, DividerModule, NgIf, TooltipModule, TagModule],
+  imports: [
+    CardModule,
+    ButtonModule,
+    NgForOf,
+    DividerModule,
+    NgIf,
+    TooltipModule,
+    TagModule,
+    ReactiveFormsModule,
+    CheckboxModule,
+  ],
 })
 export class GroupedBySetsTabComponent implements OnInit {
   owned!: string[];
-  readonly gearSets: { key: string; value: GearSetVM }[] = [];
+  private readonly _allGearSets: { key: string; value: GearSetVM }[] = [];
+  gearSetsFiltered: { key: string; value: GearSetVM }[] = [];
+  formGroup!: FormGroup;
 
   constructor(private readonly gearService: GearService) {}
 
-  ngOnInit(): void {
-    this.fetchHabiticaContent();
+  async ngOnInit(): Promise<void> {
+    await this.fetchHabiticaContent();
+
+    this.formGroup = new FormGroup({
+      showCompletedSets: new FormControl(SHOW_COMPLETED_SET, {
+        validators: [Validators.required],
+      }),
+    });
+
+    this.formGroup
+      .get("showCompletedSets")
+      ?.valueChanges.subscribe((showCompletedSets: boolean) => {
+        this.gearSetsFiltered = this._allGearSets.filter(
+          (set) => showCompletedSets || set.value.progression < 100,
+        );
+      });
   }
 
   private async fetchHabiticaContent() {
@@ -43,7 +72,7 @@ export class GroupedBySetsTabComponent implements OnInit {
       .filter((item) => item.klass === "armoire")
       .forEach((item) => this.updateSet(item));
 
-    this.gearSets.sort((setA, setB) => {
+    this._allGearSets.sort((setA, setB) => {
       const order = setB.value.progression - setA.value.progression;
       if (order === 0) {
         return setA.key.localeCompare(setB.key);
@@ -51,6 +80,12 @@ export class GroupedBySetsTabComponent implements OnInit {
 
       return order;
     });
+
+    if (SHOW_COMPLETED_SET) {
+      this.gearSetsFiltered = this._allGearSets;
+    } else {
+      this.gearSetsFiltered = this._allGearSets.filter((set) => set.value.progression < 100);
+    }
   }
 
   private updateSet(gear: HabiticaGear) {
@@ -68,7 +103,7 @@ export class GroupedBySetsTabComponent implements OnInit {
     }
 
     gearVM.owned = this.isGearOwned(gear);
-    const set = this.gearSets.find((set) => set.key === gearVM.set);
+    const set = this._allGearSets.find((set) => set.key === gearVM.set);
 
     if (!!set) {
       set.value.nbOfItemsInSet += 1;
@@ -85,7 +120,7 @@ export class GroupedBySetsTabComponent implements OnInit {
           items: [{ gear: gearVM }],
         },
       };
-      this.gearSets.push(set);
+      this._allGearSets.push(set);
     }
   }
 
