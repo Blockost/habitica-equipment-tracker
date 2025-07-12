@@ -16,6 +16,8 @@ body {
   margin: 0;
 }
 
+/* PrimeNG overrides */
+
 .card {
   background: var(--surface-card);
   padding: 1.5rem;
@@ -25,4 +27,8 @@ body {
 
 .p-divider.p-divider-horizontal {
   margin: 0.2rem 0;
+}
+
+.p-datatable-header {
+  padding: .75rem 0;
 }

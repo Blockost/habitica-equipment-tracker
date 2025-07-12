@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Button } from "primeng/button";
+import { Button, ButtonDirective } from "primeng/button";
 import { InputTextModule } from "primeng/inputtext";
 import { NgIf, TitleCasePipe } from "@angular/common";
 import { PrimeTemplate, SortMeta } from "primeng/api";
@@ -11,6 +11,9 @@ import { GearService } from "../../services/gear.service";
 import { HabiticaGearVM, mapToVM } from "../../models/vm.model";
 import { TooltipModule } from "primeng/tooltip";
 import { MultiSelectModule } from "primeng/multiselect";
+import { OverlayPanelModule } from "primeng/overlaypanel";
+import { InputIconModule } from "primeng/inputicon";
+import { IconFieldModule } from "primeng/iconfield";
 
 interface Column {
   header: string;
@@ -24,7 +27,7 @@ const DEFAULT_COLUMNS = ["name", "image", "description", "setFullName", "type", 
   selector: "app-table-tab",
   standalone: true,
   templateUrl: "./table-tab.component.html",
-  styleUrls: [],
+  styleUrls: ["./table-tab.component.scss"],
   imports: [
     Button,
     InputTextModule,
@@ -37,6 +40,10 @@ const DEFAULT_COLUMNS = ["name", "image", "description", "setFullName", "type", 
     TooltipModule,
     MultiSelectModule,
     TitleCasePipe,
+    OverlayPanelModule,
+    ButtonDirective,
+    InputIconModule,
+    IconFieldModule,
   ],
   providers: [TitleCasePipe],
 })

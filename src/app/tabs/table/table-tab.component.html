@@ -17,15 +17,12 @@
     styleClass="p-datatable-striped"
   >
     <ng-template pTemplate="caption">
-      <div class="flex">
-        <p-multiSelect
-          display="chip"
-          [options]="cols"
-          [(ngModel)]="selectedColumns"
-          optionLabel="header"
-          placeholder="Choose columns" />
-        <span class="p-input-icon-left ml-auto">
-          <i class="pi pi-search"></i>
+
+      <!-- Table controls -->
+      <div class="table-controls-container">
+        <!-- Global search input -->
+        <p-iconField iconPosition="left" class="mr-2">
+          <p-inputIcon styleClass="pi pi-search" />
           <input
             pInputText
             type="text"
@@ -33,7 +30,23 @@
             (input)="dt1.filterGlobal(searchValue, 'contains')"
             placeholder="Search by keyword"
           />
-        </span>
+        </p-iconField>
+
+        <!-- Button to open table settings overlay-->
+        <button pButton (click)="op.toggle($event)" icon="pi pi-sliders-v"
+                [severity]="'secondary'"></button>
+
+        <!-- Table settings -->
+        <p-overlayPanel #op>
+          <h3>Table settings</h3>
+          <p-multiSelect
+            display="chip"
+            [options]="cols"
+            [(ngModel)]="selectedColumns"
+            optionLabel="header"
+            placeholder="Choose columns" />
+        </p-overlayPanel>
+
       </div>
     </ng-template>
     <ng-template pTemplate="header">
