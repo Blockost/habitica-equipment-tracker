@@ -2,15 +2,23 @@ import { Component, OnInit } from "@angular/core";
 import { Button } from "primeng/button";
 import { InputTextModule } from "primeng/inputtext";
 import { NgIf, TitleCasePipe } from "@angular/common";
-import { PrimeTemplate } from "primeng/api";
+import { PrimeTemplate, SortMeta } from "primeng/api";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { Table, TableModule } from "primeng/table";
+import { TableModule } from "primeng/table";
 import { TagModule } from "primeng/tag";
-import { HabiticaService } from "../../services/habitica.service";
 import { HabiticaGear } from "../../models/habitica.model";
 import { GearService } from "../../services/gear.service";
 import { HabiticaGearVM, mapToVM } from "../../models/vm.model";
 import { TooltipModule } from "primeng/tooltip";
+import { MultiSelectModule } from "primeng/multiselect";
+
+interface Column {
+  header: string;
+  field: string;
+  disabled?: boolean;
+}
+
+const DEFAULT_COLUMNS = ["name", "image", "description", "setFullName", "type", "owned"];
 
 @Component({
   selector: "app-table-tab",
@@ -27,6 +35,8 @@ import { TooltipModule } from "primeng/tooltip";
     TagModule,
     FormsModule,
     TooltipModule,
+    MultiSelectModule,
+    TitleCasePipe,
   ],
   providers: [TitleCasePipe],
 })
@@ -37,6 +47,16 @@ export class TableTabComponent implements OnInit {
    */
   searchValue: string | undefined;
 
+  cols: Column[] = [];
+
+  /**
+   * By default, table should be sorted by "name" in ascending order.
+   * In multiple sort mode, we must define a SortMeta array.
+   */
+  defaultSort: SortMeta[] = [{ field: "name", order: 1 }];
+
+  private _selectedColumns: Column[] = [];
+
   private owned: string[] = [];
   private equipped: string[] = [];
   private costume: string[] = [];
@@ -44,13 +64,35 @@ export class TableTabComponent implements OnInit {
   constructor(private readonly gearService: GearService) {}
 
   async ngOnInit(): Promise<void> {
-    console.log("TableTabComponent init now!");
+    this.cols = [
+      { header: "Name", field: "name", disabled: true },
+      { header: "Image", field: "image" },
+      { header: "Description", field: "description" },
+      { header: "Set", field: "setFullName" },
+      { header: " Strength (STR)", field: "str" },
+      { header: "Intelligence (INT)", field: "int" },
+      { header: "Constitution (CON)", field: "con" },
+      { header: "Perception (PER)", field: "per" },
+      { header: "Type", field: "type" },
+      { header: "Owned", field: "owned", disabled: true },
+    ];
+
+    this._selectedColumns = this.cols.filter((col) => DEFAULT_COLUMNS.includes(col.field));
 
     await this.fetchHabiticaContent();
   }
 
-  clearFilters(table: Table) {
-    table.clear();
+  get selectedColumns(): Column[] {
+    return this._selectedColumns;
+  }
+
+  set selectedColumns(val: Column[]) {
+    // Restore original order
+    this._selectedColumns = this.cols.filter((col) => val.includes(col));
+  }
+
+  isColumnSelected(colField: string): boolean {
+    return this._selectedColumns.findIndex((col: Column) => col.field == colField) !== -1;
   }
 
   async equipBattleGear(vm: HabiticaGearVM) {

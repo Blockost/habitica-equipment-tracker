@@ -4,11 +4,11 @@
   <p-table
     #dt1
     [value]="gears"
-    sortField="setFullName"
-    [sortOrder]="1"
+    [sortMode]="'multiple'"
+    [multiSortMeta]="defaultSort"
     [globalFilterFields]="['name', 'set', 'type']"
     [scrollable]="true"
-    scrollHeight="flex"
+    [scrollHeight]="'flex'"
     [paginator]="true"
     [rows]="10"
     [rowsPerPageOptions]="[10, 20, 50]"
@@ -18,12 +18,12 @@
   >
     <ng-template pTemplate="caption">
       <div class="flex">
-        <p-button
-          label="Clear"
-          [outlined]="true"
-          icon="pi pi-filter-slash"
-          (onClick)="clearFilters(dt1)"
-        />
+        <p-multiSelect
+          display="chip"
+          [options]="cols"
+          [(ngModel)]="selectedColumns"
+          optionLabel="header"
+          placeholder="Choose columns" />
         <span class="p-input-icon-left ml-auto">
           <i class="pi pi-search"></i>
           <input
@@ -38,27 +38,43 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="name">
+        <th *ngIf="isColumnSelected('name')" pSortableColumn="name">
           Name
           <p-sortIcon field="name" />
         </th>
-        <th>Image</th>
-        <th>Description</th>
-        <th pSortableColumn="setFullName">
+        <th *ngIf="isColumnSelected('image')">Image</th>
+        <th *ngIf="isColumnSelected('description')">Description</th>
+        <th *ngIf="isColumnSelected('setFullName')" pSortableColumn="setFullName">
           Set
           <p-sortIcon field="setFullName" />
         </th>
-        <th pSortableColumn="type">
+        <th *ngIf="isColumnSelected('str')" pSortableColumn="str">
+          Strength (STR)
+          <p-sortIcon field="str" />
+        </th>
+        <th *ngIf="isColumnSelected('int')" pSortableColumn="int">
+          Intelligence (INT)
+          <p-sortIcon field="int" />
+        </th>
+        <th *ngIf="isColumnSelected('con')" pSortableColumn="con">
+          Constitution (CON)
+          <p-sortIcon field="con" />
+        </th>
+        <th *ngIf="isColumnSelected('per')" pSortableColumn="per">
+          Perception (PER)
+          <p-sortIcon field="per" />
+        </th>
+        <th *ngIf="isColumnSelected('type')" pSortableColumn="type">
           Type
           <p-sortIcon field="type" />
         </th>
-        <th pSortableColumn="owned">
+        <th *ngIf="isColumnSelected('owned')" pSortableColumn="owned">
           Owned
           <p-sortIcon field="owned" />
         </th>
       </tr>
       <tr>
-        <th>
+        <th *ngIf="isColumnSelected('name')">
           <p-columnFilter
             type="text"
             field="name"
@@ -68,9 +84,9 @@
             showClearButton="false"
           />
         </th>
-        <th></th>
-        <th></th>
-        <th>
+        <th *ngIf="isColumnSelected('image')"></th>
+        <th *ngIf="isColumnSelected('description')"></th>
+        <th *ngIf="isColumnSelected('setFullName')">
           <p-columnFilter
             type="text"
             field="set"
@@ -80,7 +96,11 @@
             showClearButton="false"
           />
         </th>
-        <th>
+        <th *ngIf="isColumnSelected('str')"></th>
+        <th *ngIf="isColumnSelected('int')"></th>
+        <th *ngIf="isColumnSelected('con')"></th>
+        <th *ngIf="isColumnSelected('per')"></th>
+        <th *ngIf="isColumnSelected('type')">
           <p-columnFilter
             type="text"
             field="type"
@@ -90,7 +110,7 @@
             showClearButton="false"
           />
         </th>
-        <th>
+        <th *ngIf="isColumnSelected('owned')">
           <p-columnFilter
             type="boolean"
             field="owned"
@@ -102,14 +122,18 @@
     </ng-template>
     <ng-template pTemplate="body" let-vm>
       <tr>
-        <td>{{ vm.name }}</td>
-        <td>
+        <td *ngIf="isColumnSelected('name')">{{ vm.name }}</td>
+        <td *ngIf="isColumnSelected('image')">
           <img [src]="vm.icon" [alt]="vm.key" />
         </td>
-        <td>{{ vm.description }}</td>
-        <td>{{ vm.setFullName }}</td>
-        <td>{{ vm.type }}</td>
-        <td>
+        <td *ngIf="isColumnSelected('description')">{{ vm.description }}</td>
+        <td *ngIf="isColumnSelected('setFullName')">{{ vm.setFullName }}</td>
+        <td *ngIf="isColumnSelected('str')">{{ vm.str }}</td>
+        <td *ngIf="isColumnSelected('int')">{{ vm.int }}</td>
+        <td *ngIf="isColumnSelected('con')">{{ vm.con }}</td>
+        <td *ngIf="isColumnSelected('per')">{{ vm.per }}</td>
+        <td *ngIf="isColumnSelected('type')">{{ vm.type | titlecase }}</td>
+        <td *ngIf="isColumnSelected('owned')">
           <ng-container *ngIf="vm.owned">
             <p-tag severity="success" value="Owned" />
 

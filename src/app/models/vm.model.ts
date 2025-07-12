@@ -12,6 +12,10 @@ export interface HabiticaGearVM {
   set: string;
   setIndex: string;
   setFullName: string;
+  str: number;
+  int: number;
+  con: number;
+  per: number;
   type: string;
   owned: boolean;
   equipped: boolean;
@@ -30,6 +34,10 @@ export function mapToVM(gear: HabiticaGear): HabiticaGearVM {
     set: setName,
     setIndex: setIndex,
     setFullName: mapSetFullName(setName, setIndex),
+    str: gear.str,
+    int: gear.int,
+    con: gear.con,
+    per: gear.per,
     type: gear.type,
     owned: false, // Set when mapping
     equipped: false, // Set when mapping

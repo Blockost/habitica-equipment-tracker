@@ -72,6 +72,7 @@ export class GroupedBySetsTabComponent implements OnInit {
       .filter((item) => item.klass === "armoire")
       .forEach((item) => this.updateSet(item));
 
+    // Sort gears by decreasing progression and alphabetical order
     this._allGearSets.sort((setA, setB) => {
       const order = setB.value.progression - setA.value.progression;
       if (order === 0) {
