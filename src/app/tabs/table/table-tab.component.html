@@ -17,7 +17,6 @@
     styleClass="p-datatable-striped"
   >
     <ng-template pTemplate="caption">
-
       <!-- Table controls -->
       <div class="table-controls-container">
         <!-- Global search input -->
@@ -39,6 +38,10 @@
         <!-- Table settings -->
         <p-overlayPanel #op>
           <h3>Table settings</h3>
+
+          <!-- // TODO 2025-07-14 Blockost Style this properly -->
+          <h4>Column selection</h4>
+          <p>Choose which columns to be displayed in the table using the selector below:</p>
           <p-multiSelect
             display="chip"
             [options]="cols"
@@ -46,7 +49,6 @@
             optionLabel="header"
             placeholder="Choose columns" />
         </p-overlayPanel>
-
       </div>
     </ng-template>
     <ng-template pTemplate="header">
