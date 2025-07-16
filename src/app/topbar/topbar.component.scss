@@ -1,0 +1,38 @@
+.layout-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: calc(100% - var(--scrollbar-width, 0px));
+  z-index: 1100;
+  /* Put transition back and add .sticky class when scroll is > 0 */
+  //transition: background-color .5s, border-color .5s;
+  border-bottom: 1px solid transparent;
+
+  &.layout-topbar-sticky {
+    border-bottom: 1px solid var(--surface-border);
+    //background-color: rgba(0, 0, 0, .3);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+
+  .layout-topbar-inner {
+    height: 4rem;
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .layout-topbar-left {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .layout-topbar-logo-container {
+      .app-logo {
+        max-width: 3rem;
+        height: auto;
+      }
+    }
+  }
+}

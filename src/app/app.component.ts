@@ -25,6 +25,8 @@ import { TableTabComponent } from "./tabs/table/table-tab.component";
 import { GroupedBySetsTabComponent } from "./tabs/groupedBySets/grouped-by-sets.component";
 import { AvatarComponent } from "./avatar/avatar.component";
 import { version } from "../../version";
+import { MenubarModule } from "primeng/menubar";
+import { TopbarComponent } from "./topbar/topbar.component";
 
 @Component({
   selector: "app-root",
@@ -49,6 +51,8 @@ import { version } from "../../version";
     GroupedBySetsTabComponent,
     AvatarComponent,
     NgOptimizedImage,
+    MenubarModule,
+    TopbarComponent,
   ],
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.scss",
