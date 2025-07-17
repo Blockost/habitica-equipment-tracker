@@ -13,8 +13,15 @@
     </div>
 
     <!-- Right side -->
-    <div class="layout-topbar-left">
+    <div class="layout-topbar-right">
+      <!-- Dark mode button -->
       <app-dark-mode-button></app-dark-mode-button>
+      <p-divider layout="vertical" class="divider"/>
+      <!-- External links-->
+      <a class="p-button p-button-secondary p-button-icon-only" *ngFor="let link of links"
+         [href]="link.url" [pTooltip]="link.tooltip" target="_blank" rel="noopener noreferrer">
+        <i [class]="link.icon"></i>
+      </a>
     </div>
   </div>
 </div>

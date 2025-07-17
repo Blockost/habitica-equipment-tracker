@@ -3,7 +3,6 @@ import { RouterOutlet } from "@angular/router";
 import { HabiticaService } from "./services/habitica.service";
 import { TableModule } from "primeng/table";
 import { NgIf, NgOptimizedImage } from "@angular/common";
-import { TagModule } from "primeng/tag";
 import { ButtonModule } from "primeng/button";
 import {
   FormGroup,
@@ -34,7 +33,6 @@ import { TopbarComponent } from "./topbar/topbar.component";
   imports: [
     RouterOutlet,
     TableModule,
-    TagModule,
     NgIf,
     ButtonModule,
     FormsModule,
