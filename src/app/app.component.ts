@@ -61,8 +61,10 @@ export class AppComponent {
   loading = false;
   version = version;
 
-  @ViewChild("accordion")
-  private readonly accordion!: Accordion;
+  /**
+   * Active index of the accordion component.
+   */
+  accordionActiveIndex = "0";
 
   constructor(
     private readonly habiticaService: HabiticaService,
@@ -116,7 +118,7 @@ export class AppComponent {
     this.username = userInfo.auth.local.username;
 
     this.loading = false;
-    this.accordion.activeIndex = 1;
+    this.accordionActiveIndex = "1";
   }
 
   async refresh(): Promise<void> {

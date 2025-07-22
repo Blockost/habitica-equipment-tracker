@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Button, ButtonDirective } from "primeng/button";
+import { Button } from "primeng/button";
 import { InputTextModule } from "primeng/inputtext";
 import { NgIf, TitleCasePipe } from "@angular/common";
 import { PrimeTemplate, SortMeta } from "primeng/api";
@@ -11,9 +11,11 @@ import { GearService } from "../../services/gear.service";
 import { HabiticaGearVM, mapToVM } from "../../models/vm.model";
 import { TooltipModule } from "primeng/tooltip";
 import { MultiSelectModule } from "primeng/multiselect";
-import { OverlayPanelModule } from "primeng/overlaypanel";
 import { InputIconModule } from "primeng/inputicon";
 import { IconFieldModule } from "primeng/iconfield";
+import { Select } from "primeng/select";
+import { Popover } from "primeng/popover";
+import { Message } from "primeng/message";
 
 interface Column {
   header: string;
@@ -22,6 +24,12 @@ interface Column {
 }
 
 const DEFAULT_COLUMNS = ["name", "image", "description", "setFullName", "type", "owned"];
+
+interface SelectItemData {
+  label: string;
+  value: any;
+  severity: "success" | "warn" | "secondary";
+}
 
 @Component({
   selector: "app-table-tab",
@@ -40,10 +48,11 @@ const DEFAULT_COLUMNS = ["name", "image", "description", "setFullName", "type", 
     TooltipModule,
     MultiSelectModule,
     TitleCasePipe,
-    OverlayPanelModule,
-    ButtonDirective,
     InputIconModule,
     IconFieldModule,
+    Select,
+    Popover,
+    Message,
   ],
   providers: [TitleCasePipe],
 })
@@ -61,6 +70,12 @@ export class TableTabComponent implements OnInit {
    * In multiple sort mode, we must define a SortMeta array.
    */
   defaultSort: SortMeta[] = [{ field: "name", order: 1 }];
+
+  ownedStatuses: SelectItemData[] = [
+    { label: "Owned", value: true, severity: "success" },
+    { label: "Not owned", value: false, severity: "warn" },
+    { label: "Both", value: null, severity: "secondary" },
+  ];
 
   private _selectedColumns: Column[] = [];
 

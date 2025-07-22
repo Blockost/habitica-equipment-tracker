@@ -23,7 +23,7 @@ export class StatsTabComponent implements OnInit {
       {
         label: `Items owned (${this.stats.nbItemsOwned} out of ${this.stats.nbItemsTotal} items in total)`,
         value: round(percentage) * 100,
-        color: "var(--primary-color)",
+        color: "var(--p-primary-color)",
       },
     ];
   }

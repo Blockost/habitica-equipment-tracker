@@ -3,9 +3,12 @@
   max-width: 300px;
 }
 
-.custom-input-group {
-  .p-button-icon-only {
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
+.custom-datatable {
+  th {
+    min-width: 100px;
+  }
+
+  .column-filter-select {
+    min-width: 100px;
   }
 }
