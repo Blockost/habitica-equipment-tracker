@@ -38,7 +38,9 @@ export class HabiticaService {
   @Cacheable(HABITICA_ALL_CONTENT_RESPONSE)
   public async getAllContent(): Promise<HabiticaAllContentData> {
     const res = (await firstValueFrom(
-      this.httpClient.get(`${HABITICA_ROOT_URL}/content`),
+      this.httpClient.get(`${HABITICA_ROOT_URL}/content`, {
+        headers: this.getDefaultAuthenticatedHeaders(),
+      }),
     )) as HabiticaAllContentResponse;
 
     if (!res.success) {
@@ -102,11 +104,19 @@ export class HabiticaService {
     return itemsInfo;
   }
 
-  private getDefaultAuthenticatedHeaders(userId: string, apiToken: string): HttpHeaders {
-    return new HttpHeaders({
-      [X_API_USER_HEADER]: userId,
-      [X_API_KEY_HEADER]: apiToken,
+  private getDefaultAuthenticatedHeaders(userId?: string, apiToken?: string): HttpHeaders {
+    let httpHeaders = new HttpHeaders({
       [X_CLIENT_HEADER]: "afd928ee-fcee-4e3b-ae2c-f7330d5caa4c-habitica-equipment-tracker",
     });
+
+    if (userId) {
+      httpHeaders = httpHeaders.append(X_API_USER_HEADER, userId);
+    }
+
+    if (apiToken) {
+      httpHeaders = httpHeaders.append(X_API_KEY_HEADER, apiToken);
+    }
+
+    return httpHeaders;
   }
 }

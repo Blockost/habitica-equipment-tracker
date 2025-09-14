@@ -382,14 +382,16 @@
                 </div>
               </div>
 
-              <p-checkbox
-                formControlName="saveLocally"
-                label="Save my information locally"
-                value=""
-                inputId="saveLocally"
-                name="saveLocally"
-                binary="true"
-              />
+              <div class="flex items-center gap-1">
+                <p-checkbox
+                  formControlName="saveLocally"
+                  value=""
+                  inputId="saveLocally"
+                  name="saveLocally"
+                  binary="true"
+                />
+                <label for="saveLocally" class="ml-2">Save my information locally</label>
+              </div>
 
               <p-button label="Submit" type="submit" [loading]="loading" />
             </form>
@@ -447,13 +449,5 @@
   </div>
   <!-- TODO: add footer here + show app version -->
 </main>
-
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
 <router-outlet />
